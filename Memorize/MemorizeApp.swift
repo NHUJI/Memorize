@@ -11,6 +11,7 @@ import SwiftUI
 struct MemorizeApp: App {
     var body: some Scene {
         WindowGroup {
+            //主要显示的内容:
             ContentView()
         }
     }
