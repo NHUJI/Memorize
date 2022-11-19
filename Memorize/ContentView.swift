@@ -11,24 +11,59 @@ import SwiftUI
 //结构:变量的集合 不仅有变量也可以有函数
 struct ContentView: View {
     var emojis = ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"]
-    var emojiCount = 6
+    @State var emojiCount = 5
     
     var body: some View {
-        HStack{
-            /*
-             content由于是最后一个参数被省略了
-            ForEach(emojis,id: \.self, content: { emoji in
-                CardView(content: emoji)
-            })
-             */
-            ForEach(emojis[0..<emojiCount],id: \.self) { emoji in
-                CardView(content: emoji)
+        VStack{
+            HStack{
+                /*
+                 content由于是最后一个参数被省略了
+                 ForEach(emojis,id: \.self, content: { emoji in
+                 CardView(content: emoji)
+                 })
+                 */
+                ForEach(emojis[0..<emojiCount],id: \.self) { emoji in
+                    CardView(content: emoji)
+                }
             }
+            Spacer()
+            HStack{
+                remove
+                Spacer()
+                add
+            }
+            .font(.largeTitle)
+            .padding(.horizontal)
         }
-        .padding(.vertical)
+        .padding(.horizontal)
         .foregroundColor(Color.red)
     }
+
+    var remove: some View{
+        //简洁写法
+        Button {
+            if emojiCount > 1 {
+                emojiCount -= 1
+            }
+        }label: {
+            Image(systemName: "minus.circle")
+        }
+    }
+    
+    var add: some View{
+        //完全的写法
+        Button(action: {
+            if emojiCount < emojis.count{
+                emojiCount += 1
+            }
+        },label: {
+           Image(systemName: "plus.circle")
+        })
+    }
+    
+    
 }
+
 
 struct CardView : View{
     var content:String
@@ -68,5 +103,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         //可以通过设置多个ContentView()来看不同的模拟效果
         ContentView()
+        ContentView()
+            .preferredColorScheme(.dark)
     }
 }
