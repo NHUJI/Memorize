@@ -13,7 +13,7 @@ struct ContentView: View {
     var car = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺", ]
     var food = ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝", ]
     var play = ["⚽️", "🪀",  "🎾", "🏋🏻", "🥌", "⛸️",  "🎸","🚣‍♀️" ]
-    @State var emojis = ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"]
+    @State public var emojis = ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"]
     @State var emojiCount = 8
     
     var body: some View {
@@ -34,27 +34,27 @@ struct ContentView: View {
         
     }
 
-    var remove: some View{
-        //简洁写法
-        Button {
-            if emojiCount > 1 {
-                emojiCount -= 1
-            }
-        }label: {
-            Image(systemName: "minus.circle")
-        }
-    }
-    
-    var add: some View{
-        //完全的写法
-        Button(action: {
-            if emojiCount < emojis.count{
-                emojiCount += 1
-            }
-        },label: {
-           Image(systemName: "plus.circle")
-        })
-    }
+//    var remove: some View{
+//        //简洁写法
+//        Button {
+//            if emojiCount > 1 {
+//                emojiCount -= 1
+//            }
+//        }label: {
+//            Image(systemName: "minus.circle")
+//        }
+//    }
+//
+//    var add: some View{
+//        //完全的写法
+//        Button(action: {
+//            if emojiCount < emojis.count{
+//                emojiCount += 1
+//            }
+//        },label: {
+//           Image(systemName: "plus.circle")
+//        })
+//    }
     var themeButton: some View{
         HStack{
             Theme(theme: "car", image: "car")
