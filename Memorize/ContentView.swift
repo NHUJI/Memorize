@@ -10,34 +10,25 @@ import SwiftUI
 
 //结构:变量的集合 不仅有变量也可以有函数
 struct ContentView: View {
-    var emojis = ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"]
-    @State var emojiCount = 5
+    var car = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺", ]
+    var food = ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝", ]
+    var play = ["⚽️", "🪀",  "🎾", "🏋🏻", "🥌", "⛸️",  "🎸","🚣‍♀️" ]
+    @State var emojis = ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"]
+    @State var emojiCount = 8
     
     var body: some View {
         VStack{
+            Text("Memorize!").font(.largeTitle)
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]){
-                        /*
-                         content由于是最后一个参数被省略了
-                         ForEach(emojis,id: \.self, content: { emoji in
-                         CardView(content: emoji)
-                         })
-                         */
-                        ForEach(emojis[0..<emojiCount],id: \.self) { emoji in
+                    ForEach(emojis[0..<Int.random(in: 4...emojiCount)],id: \.self) { emoji in
                             CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
-                        
                     }
                 }
             }
             .foregroundColor(Color.red)
             Spacer()
-            HStack{
-                remove
-                Spacer()
-                add
-            }
-            .font(.largeTitle)
-            .padding(.horizontal)
+            themeButton
         }
         .padding(.horizontal)
         
@@ -64,15 +55,37 @@ struct ContentView: View {
            Image(systemName: "plus.circle")
         })
     }
-    
+    var themeButton: some View{
+        HStack{
+            Theme(theme: "car", image: "car")
+                .padding(.horizontal)
+                .onTapGesture {
+                
+                    emojis = car.shuffled()
+                
+                }
+            
+            Theme(theme: "food", image: "takeoutbag.and.cup.and.straw")
+                .padding(/*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/)
+                .onTapGesture {
+                   emojis = food.shuffled()
+                }
+            
+            Theme(theme: "play", image: "gamecontroller")
+                .padding(/*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/)
+                .onTapGesture {
+                   emojis = play.shuffled()
+                }
+            
+        }
+    }
     
 }
 
 
-struct CardView : View{
+struct CardView: View{
     var content:String
     @State var isFaceUp : Bool = true
-    
     var body: some View{
         ZStack{
             let shape = RoundedRectangle(cornerRadius: 20)
@@ -89,7 +102,22 @@ struct CardView : View{
         }
     }
 }
-   
+
+struct Theme: View{
+    var theme:String
+    var image:String
+    var body: some View{
+        VStack{
+            Image(systemName: image).font(.largeTitle)
+            Text(theme)
+        }
+        
+        .foregroundColor(.blue)
+        
+        
+    }
+    
+}
 
 
 
