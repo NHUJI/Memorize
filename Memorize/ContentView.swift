@@ -10,14 +10,20 @@ import SwiftUI
 
 //结构:变量的集合 不仅有变量也可以有函数
 struct ContentView: View {
-    var emojis = ["🍙", "🍰", "🧁", "🍭"]
+    var emojis = ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"]
+    var emojiCount = 6
     
     var body: some View {
         HStack{
-            CardView(Content: emojis[0])
-            CardView(Content: emojis[1])
-            CardView(Content: emojis[2])
-            CardView(Content: emojis[3])
+            /*
+             content由于是最后一个参数被省略了
+            ForEach(emojis,id: \.self, content: { emoji in
+                CardView(content: emoji)
+            })
+             */
+            ForEach(emojis[0..<emojiCount],id: \.self) { emoji in
+                CardView(content: emoji)
+            }
         }
         .padding(.vertical)
         .foregroundColor(Color.red)
@@ -25,7 +31,7 @@ struct ContentView: View {
 }
 
 struct CardView : View{
-    var Content:String
+    var content:String
     @State var isFaceUp : Bool = true
     
     var body: some View{
@@ -34,7 +40,7 @@ struct CardView : View{
             if isFaceUp{
                 shape.fill().foregroundColor(.white)
                 shape.stroke(lineWidth: 3)
-                Text(Content).font(.largeTitle)
+                Text(content).font(.largeTitle)
             }else{
                 shape.fill()
             }
@@ -62,7 +68,5 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         //可以通过设置多个ContentView()来看不同的模拟效果
         ContentView()
-        ContentView()
-            .preferredColorScheme(.dark)
     }
 }
