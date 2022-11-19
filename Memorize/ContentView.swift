@@ -15,16 +15,14 @@ struct ContentView: View {
     var play = ["⚽️", "🪀",  "🎾", "🏋🏻", "🥌", "⛸️",  "🎸","🚣‍♀️" ]
     @State public var emojis = ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"]
     @State var emojiCount = 8
+    var minNumberOfCards = 3
     
     var body: some View {
+        
         VStack{
             Text("Memorize!").font(.largeTitle)
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]){
-                    ForEach(emojis[0..<Int.random(in: 4...emojiCount)],id: \.self) { emoji in
-                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
-                    }
-                }
+                CardsView
             }
             .foregroundColor(Color.red)
             Spacer()
@@ -55,28 +53,25 @@ struct ContentView: View {
 //           Image(systemName: "plus.circle")
 //        })
 //    }
+    var CardsView: some View{
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]){
+            ForEach(emojis[0..<Int.random(in: minNumberOfCards...emojiCount)],id: \.self) { emoji in
+                    CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+            }
+        }
+    }
+    
     var themeButton: some View{
         HStack{
             Theme(theme: "car", image: "car")
                 .padding(.horizontal)
-                .onTapGesture {
-                
-                    emojis = car.shuffled()
-                
-                }
-            
+                .onTapGesture {emojis = play.shuffled()}
             Theme(theme: "food", image: "takeoutbag.and.cup.and.straw")
                 .padding(/*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/)
-                .onTapGesture {
-                   emojis = food.shuffled()
-                }
-            
+                .onTapGesture {emojis = play.shuffled()}
             Theme(theme: "play", image: "gamecontroller")
                 .padding(/*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/)
-                .onTapGesture {
-                   emojis = play.shuffled()
-                }
-            
+                .onTapGesture {emojis = play.shuffled()}
         }
     }
     
@@ -95,6 +90,8 @@ struct CardView: View{
                 Text(content).font(.largeTitle)
             }else{
                 shape.fill()
+                //避免反转后卡片大小不一致的问题
+                Text(" ").font(.largeTitle)
             }
         }
         .onTapGesture {
@@ -104,6 +101,8 @@ struct CardView: View{
 }
 
 struct Theme: View{
+    @State  var fgColor: Color = .blue
+    
     var theme:String
     var image:String
     var body: some View{
@@ -111,12 +110,8 @@ struct Theme: View{
             Image(systemName: image).font(.largeTitle)
             Text(theme)
         }
-        
-        .foregroundColor(.blue)
-        
-        
+        .foregroundColor(fgColor)
     }
-    
 }
 
 
