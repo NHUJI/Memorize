@@ -13,17 +13,14 @@ struct ContentView: View {
     @ObservedObject var viewMoedl: EmojiMemoryGame
   
     var body: some View {
-        
-        VStack{
-            Text("Memorize!").font(.largeTitle)
-            ScrollView {
-                CardsView
-            }
-            .foregroundColor(Color.red)
+        ScrollView {
+            CardsView
         }
+        .foregroundColor(Color.red)
         .padding(.horizontal)
         
     }
+    
     var CardsView: some View{
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]){
             ForEach(viewMoedl.cards) { card in
@@ -43,7 +40,6 @@ struct ContentView: View {
 
 struct CardView: View{
     let card: MemoryGame<String>.Card
-    
     var body: some View{
         ZStack{
             let shape = RoundedRectangle(cornerRadius: 20)
@@ -61,19 +57,6 @@ struct CardView: View{
     }
 }
 
-struct Theme: View{
-    @State  var fgColor: Color = .blue
-    
-    var theme:String
-    var image:String
-    var body: some View{
-        VStack{
-            Image(systemName: image).font(.largeTitle)
-            Text(theme)
-        }
-        .foregroundColor(fgColor)
-    }
-}
 
 
 
