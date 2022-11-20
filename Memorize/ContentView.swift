@@ -90,7 +90,6 @@ struct CardView: View{
                 Text(content).font(.largeTitle)
             }else{
                 shape.fill()
-                //避免反转后卡片大小不一致的问题
                 Text(" ").font(.largeTitle)
             }
         }
