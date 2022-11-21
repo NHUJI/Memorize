@@ -22,25 +22,17 @@ struct MemoryGame<CardContent>{
         }
     }
     
-    //函数 名字(标签:类型)
     mutating func choose(_ card: Card){
-        let chosenIndex = index(of: card)
-        //.toggle()和“= !isFaceUp”效果相同
-        cards[chosenIndex].isFaceUp.toggle()
+        
+        if let chosenIndex = cards.firstIndex(where: {$0.id == card.id}) {
+            
+            cards[chosenIndex].isFaceUp.toggle()
+        }
         //调试语句
         print("\(cards)")
     }
     
-    func index(of: Card) -> Int {
-        for index in 0..<cards.count {
-            if cards[index].id == of.id {
-                return index
-            }
-        }
-        //这里有一点小问题
-        return 0
-    }
-    
+   
     //之所以放在里面可以表明它是MemoryGame的card,并且有可以识别的不同卡片的id
     struct Card: Identifiable {
         var isFaceUp: Bool = true
