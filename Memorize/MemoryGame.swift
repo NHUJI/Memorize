@@ -8,9 +8,34 @@
 
 //Foundation 包括数组字典等基础结构
 import Foundation
-//<CardContent>:使用泛型增加扩展性,比如卡片可以接受图片、String和更多类型的数据作为卡面
-struct MemoryGame<CardContent>{
+//<CardContent>:使用泛型增加扩展性,比如卡片可以接受图片、String和更多类型的数据作为卡面,并且CardContent类型要求可以进行比较
+struct MemoryGame<CardContent> where CardContent: Equatable{
     private(set) var cards: Array<Card>
+   
+    private var indexOfTheOneAndOnlyFaceUpCard: Int?
+   
+    mutating func choose(_ card: Card){
+        if let chosenIndex = cards.firstIndex(where: {$0.id == card.id}),
+           //如果已经向上或配对的卡片被点击无效
+           !cards[chosenIndex].isFaceUp,
+           !cards[chosenIndex].isMatched
+        {
+            if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
+                if cards[chosenIndex].content == cards[potentialMatchIndex].content {
+                    cards[chosenIndex].isMatched = true
+                    cards[potentialMatchIndex].isMatched = true
+                }
+                indexOfTheOneAndOnlyFaceUpCard = nil
+            }else{
+                for index in cards.indices {
+                    cards[index].isFaceUp = false
+                }
+                indexOfTheOneAndOnlyFaceUpCard = chosenIndex
+            }
+            cards[chosenIndex].isFaceUp.toggle()
+        }
+    }
+    
     //需要卡片对数量和一个可以给int然后得到卡片内容的函数
     init(numberOfPairsOfCards: Int, creatCardContent: (Int) -> CardContent) {
         cards = Array<Card>()
@@ -22,20 +47,9 @@ struct MemoryGame<CardContent>{
         }
     }
     
-    mutating func choose(_ card: Card){
-        
-        if let chosenIndex = cards.firstIndex(where: {$0.id == card.id}) {
-            
-            cards[chosenIndex].isFaceUp.toggle()
-        }
-        //调试语句
-        print("\(cards)")
-    }
-    
    
-    //之所以放在里面可以表明它是MemoryGame的card,并且有可以识别的不同卡片的id
     struct Card: Identifiable {
-        var isFaceUp: Bool = true
+        var isFaceUp: Bool = false
         var isMatched: Bool = false
         var content: CardContent
         var id: Int

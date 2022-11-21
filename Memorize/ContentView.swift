@@ -47,6 +47,9 @@ struct CardView: View{
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: 3)
                 Text(card.content).font(.largeTitle)
+            }else if card.isMatched{
+                Text(" ").font(.largeTitle)
+                shape.opacity(0.3)
             }else{
                 shape.fill()
                 //全名Font.largeTitle,是static变量
