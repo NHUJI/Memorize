@@ -14,19 +14,19 @@ class EmojiMemoryGame: ObservableObject {
     static let car = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺", ]
     static let food = ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝", ]
     static let play = ["⚽️", "🪀",  "🎾", "🏋🏻", "🥌", "⛸️",  "🎸","🚣‍♀️" ]
-    static let emojis = ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"]
-    
+    static let mess = ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"]
+    static var themes = [car, food, play, mess]
     //生成内容的函数 独立出来,让代码更加简洁
-    static func createMemoryGame() -> MemoryGame<String> {
+    static func createMemoryGame(randomTheme: [String] ) -> MemoryGame<String> {
         //生成model需要卡片对的数量和生成卡片内容的函数
         MemoryGame<String>(numberOfPairsOfCards: 6){ pairIndex in
             //使用了全名
-            EmojiMemoryGame.emojis[pairIndex]
+            randomTheme[pairIndex]
         }
     }
     
     //创建一个model,并通过“private”保护它不被view直接修改,(set)表示UI可以看不能改(也可以另外搞个变量来返回model.cards),@Published表示只要model改变就广播
-    @Published private(set) var model: MemoryGame<String> = createMemoryGame()
+    @Published private(set) var model: MemoryGame<String> = createMemoryGame(randomTheme: themes.randomElement() ?? mess)
     
     var cards: Array<MemoryGame<String>.Card> {
         model.cards

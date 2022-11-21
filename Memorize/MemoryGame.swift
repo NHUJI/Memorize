@@ -54,4 +54,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
         var content: CardContent
         var id: Int
     }
+    
+    struct Theme {
+        var name: String
+        var cardsSet: Array<Any>
+        var pairsOfCards: Int
+        var cardColor: String
+    }
 }
