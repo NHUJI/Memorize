@@ -10,12 +10,12 @@ import SwiftUI
 
 //ObservableObject表示可以广播改变
 class EmojiMemoryGame: ObservableObject {
-    static var car = MemoryGame<String>.Theme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺", ], pairsOfCards: 11, cardColor: .red)
-    static var food = MemoryGame<String>.Theme(name: "food", cardsSet: ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝", ], pairsOfCards: 11, cardColor: .blue)
-    static var play = MemoryGame<String>.Theme(name: "play", cardsSet: ["⚽️", "🪀",  "🎾", "🏋🏻", "🥌", "⛸️",  "🎸","🚣‍♀️" ], pairsOfCards: 8, cardColor: .mint)
-    static var mess = MemoryGame<String>.Theme(name: "mess", cardsSet:["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"], pairsOfCards:14 , cardColor: .orange)
-    static var themes: Array<MemoryGame.Theme> = [car, food, play, mess]
-    static var chosenTheme = themes.randomElement()!
+    private static var car = MemoryGame<String>.Theme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺", ], pairsOfCards: 11, cardColor: .red)
+    private static var food = MemoryGame<String>.Theme(name: "food", cardsSet: ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝", ], pairsOfCards: 11, cardColor: .blue)
+    private static var play = MemoryGame<String>.Theme(name: "play", cardsSet: ["⚽️", "🪀",  "🎾", "🏋🏻", "🥌", "⛸️",  "🎸","🚣‍♀️" ], pairsOfCards: 8, cardColor: .mint)
+    private static var mess = MemoryGame<String>.Theme(name: "mess", cardsSet:["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"], pairsOfCards:14 , cardColor: .orange)
+    private static var themes: Array<MemoryGame.Theme> = [car, food, play, mess]
+    private static var chosenTheme = themes.randomElement()!
     
     //生成内容的函数 独立出来,让代码更加简洁
     static func createMemoryGame(randomTheme: [String] ) -> MemoryGame<String> {

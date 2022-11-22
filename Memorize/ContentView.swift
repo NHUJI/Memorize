@@ -11,8 +11,6 @@ import SwiftUI
 //结构:变量的集合 不仅有变量也可以有函数
 struct ContentView: View {
     @ObservedObject var viewMoedl: EmojiMemoryGame
-    //不明白这里为什么不能放vm而是放的emg
-    @State var fgColor = EmojiMemoryGame.chosenTheme.cardColor
     var body: some View {
         VStack{
             Text(viewMoedl.currentTheme.name).font(.largeTitle).foregroundColor(viewMoedl.currentTheme.cardColor)
@@ -20,15 +18,13 @@ struct ContentView: View {
             ScrollView {
                 CardsView
             }
-            .foregroundColor(fgColor)
+            .foregroundColor(viewMoedl.currentTheme.cardColor)
             .padding(.horizontal)
             Button(action: {
                 viewMoedl.newGame()
-                fgColor = viewMoedl.currentTheme.cardColor
             }, label:{
                 Text("New Game").font(.largeTitle)
-            }
-            )
+            })
         }
     }
     

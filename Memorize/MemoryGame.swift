@@ -64,7 +64,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
         //将创建的卡片打乱
         cards = cards.shuffled()
         score = 0
-        
     }
     
    
@@ -72,14 +71,14 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
         var isFaceUp: Bool = false
         var isMatched: Bool = false
         var isChosen: Bool = false
-        var content: CardContent
-        var id: Int
+        let content: CardContent
+        let id: Int
     }
     
     struct Theme {
-        var name: String
-        var cardsSet: Array<String>
-        var pairsOfCards: Int
-        var cardColor: Color
+        let name: String
+        let cardsSet: Array<String>
+        let pairsOfCards: Int
+        let cardColor: Color
     }
 }
