@@ -13,7 +13,7 @@ import SwiftUI
 struct MemoryGame<CardContent> where CardContent: Equatable{
     private(set) var cards: Array<Card>
     private(set) var theme: Theme
-    
+    private(set) var score: Int
    
     private var indexOfTheOneAndOnlyFaceUpCard: Int?
    
@@ -23,11 +23,22 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
            !cards[chosenIndex].isFaceUp,
            !cards[chosenIndex].isMatched
         {
+            //卡片成功配对
             if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
                 if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
+                    score = score + 2
+                }else {
+                    //如果当前的卡片或者两张卡片都被选过就扣1分 (避免前一张卡卡片肯定是被选过导致扣分的问题)
+                    if cards[chosenIndex].isChosen == true {
+                        score = score - 1
+                    }else if cards[chosenIndex].isChosen == false && cards[potentialMatchIndex].isChosen == true{
+                        score = score - 1
+                    }
                 }
+                cards[chosenIndex].isChosen = true
+                cards[potentialMatchIndex].isChosen = true
                 indexOfTheOneAndOnlyFaceUpCard = nil
             }else{
                 for index in cards.indices {
@@ -35,7 +46,9 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
                 }
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
             }
+            
             cards[chosenIndex].isFaceUp.toggle()
+           
         }
     }
 
@@ -52,7 +65,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
         }
         //将创建的卡片打乱
         cards = cards.shuffled()
-        
+        score = 0
         
     }
     
@@ -60,6 +73,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
     struct Card: Identifiable {
         var isFaceUp: Bool = false
         var isMatched: Bool = false
+        var isChosen: Bool = false
         var content: CardContent
         var id: Int
     }

@@ -16,6 +16,7 @@ struct ContentView: View {
     var body: some View {
         VStack{
             Text(viewMoedl.currentTheme.name).font(.largeTitle).foregroundColor(viewMoedl.currentTheme.cardColor)
+            Text("score: \(viewMoedl.model.score)").foregroundColor(viewMoedl.currentTheme.cardColor)
             ScrollView {
                 CardsView
             }
@@ -38,6 +39,7 @@ struct ContentView: View {
                         .aspectRatio(2/3, contentMode: .fit)
                         .onTapGesture {
                             viewMoedl.choose(card)
+                            print(viewMoedl.cards)
                         }
             }
         }
