@@ -11,6 +11,7 @@ import Foundation
 //<CardContent>:使用泛型增加扩展性,比如卡片可以接受图片、String和更多类型的数据作为卡面,并且CardContent类型要求可以进行比较
 struct MemoryGame<CardContent> where CardContent: Equatable{
     private(set) var cards: Array<Card>
+    private(set) var theme: EmojiMemoryGame.Theme
     
    
     private var indexOfTheOneAndOnlyFaceUpCard: Int?
@@ -39,7 +40,8 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
 
     
     //需要卡片对数量和一个可以给int然后得到卡片内容的函数
-    init(numberOfPairsOfCards: Int, creatCardContent: (Int) -> CardContent) {
+    init(numberOfPairsOfCards: Int,theme chosenTheme: EmojiMemoryGame.Theme, creatCardContent: (Int) -> CardContent) {
+        theme = chosenTheme
         cards = Array<Card>()
         // 添加numberOfPairsOfCards 2倍的卡片到数组
         for pairIndex in 0..<numberOfPairsOfCards{
@@ -49,6 +51,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
         }
         //将创建的卡片打乱
         cards = cards.shuffled()
+        
         
     }
     
