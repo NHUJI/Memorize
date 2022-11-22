@@ -20,7 +20,7 @@ class EmojiMemoryGame: ObservableObject {
     //生成内容的函数 独立出来,让代码更加简洁
     static func createMemoryGame(randomTheme: [String] ) -> MemoryGame<String> {
         //生成model需要卡片对的数量和生成卡片内容的函数
-        MemoryGame<String>(numberOfPairsOfCards: Int.random(in: 4..<chosenTheme.pairsOfCards-1), theme: chosenTheme){ pairIndex in
+        MemoryGame<String>(numberOfPairsOfCards: Int.random(in: 4..<chosenTheme.pairsOfCards), theme: chosenTheme){ pairIndex in
             //使用了全名
             randomTheme[pairIndex]
         }

@@ -30,10 +30,8 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
                     cards[potentialMatchIndex].isMatched = true
                     score = score + 2
                 }else {
-                    //如果当前的卡片或者两张卡片都被选过就扣1分 (避免前一张卡卡片肯定是被选过导致扣分的问题)
-                    if cards[chosenIndex].isChosen == true {
-                        score = score - 1
-                    }else if cards[chosenIndex].isChosen == false && cards[potentialMatchIndex].isChosen == true{
+                    //配对失败的话只要有一张之前被翻开过就扣分
+                    if cards[chosenIndex].isChosen == true || cards[potentialMatchIndex].isChosen == true{
                         score = score - 1
                     }
                 }
