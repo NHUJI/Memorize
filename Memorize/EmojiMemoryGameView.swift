@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  EmojiMemoryGameView.swift
 //  Memorize
 //
 //  Created by huhu on 2022/11/15.
@@ -9,19 +9,19 @@
 import SwiftUI
 
 //结构:变量的集合 不仅有变量也可以有函数
-struct ContentView: View {
-    @ObservedObject var viewMoedl: EmojiMemoryGame
+struct EmojiMemoryGameView: View {
+    @ObservedObject var game: EmojiMemoryGame
     var body: some View {
         VStack{
-            Text(viewMoedl.currentTheme.name).font(.largeTitle).foregroundColor(viewMoedl.currentTheme.cardColor)
-            Text("score: \(viewMoedl.model.score)").foregroundColor(viewMoedl.currentTheme.cardColor)
+            Text(game.currentTheme.name).font(.largeTitle).foregroundColor(game.currentTheme.cardColor)
+            Text("score: \(game.model.score)").foregroundColor(game.currentTheme.cardColor)
             ScrollView {
                 CardsView
             }
-            .foregroundColor(viewMoedl.currentTheme.cardColor)
+            .foregroundColor(game.currentTheme.cardColor)
             .padding(.horizontal)
             Button(action: {
-                viewMoedl.newGame()
+                game.newGame()
             }, label:{
                 Text("New Game").font(.largeTitle)
             })
@@ -30,12 +30,12 @@ struct ContentView: View {
     
     var CardsView: some View{
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]){
-            ForEach(viewMoedl.cards) { card in
-                    CardView(card: card)
+            ForEach(game.cards) { card in
+                    CardView(card)
                         .aspectRatio(2/3, contentMode: .fit)
                         .onTapGesture {
-                            viewMoedl.choose(card)
-                            print(viewMoedl.cards)
+                            game.choose(card)
+                            print(game.cards)
                         }
             }
         }
@@ -47,7 +47,13 @@ struct ContentView: View {
 
 
 struct CardView: View{
-    let card: MemoryGame<String>.Card
+    private let card: EmojiMemoryGame.Card
+    
+    //这样就不需要输入CardView(card: card),不过这样有点多余
+    init(_ card: EmojiMemoryGame.Card){
+        self.card = card
+    }
+    
     var body: some View{
         ZStack{
             let shape = RoundedRectangle(cornerRadius: 20)
@@ -84,9 +90,9 @@ struct CardView: View{
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGame()
-        //可以通过设置多个ContentView()来看不同的模拟效果
-        ContentView(viewMoedl: game)
-        ContentView(viewMoedl: game)
+        //可以通过设置多个EmojiMemoryGameView()来看不同的模拟效果
+        EmojiMemoryGameView(game: game)
+        EmojiMemoryGameView(game: game)
             .preferredColorScheme(.dark)
     }
 }

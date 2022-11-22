@@ -55,6 +55,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
     init(numberOfPairsOfCards: Int,theme chosenTheme: Theme, creatCardContent: (Int) -> CardContent) {
         theme = chosenTheme
         cards = Array<Card>()
+        
         // 添加numberOfPairsOfCards 2倍的卡片到数组
         for pairIndex in 0..<numberOfPairsOfCards{
             let content = creatCardContent(pairIndex)
@@ -68,9 +69,9 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
     
    
     struct Card: Identifiable {
-        var isFaceUp: Bool = false
-        var isMatched: Bool = false
-        var isChosen: Bool = false
+        var isFaceUp = false
+        var isMatched = false
+        var isChosen = false
         let content: CardContent
         let id: Int
     }

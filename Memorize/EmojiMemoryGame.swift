@@ -10,11 +10,14 @@ import SwiftUI
 
 //ObservableObject表示可以广播改变
 class EmojiMemoryGame: ObservableObject {
-    private static var car = MemoryGame<String>.Theme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺", ], pairsOfCards: 11, cardColor: .red)
-    private static var food = MemoryGame<String>.Theme(name: "food", cardsSet: ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝", ], pairsOfCards: 11, cardColor: .blue)
-    private static var play = MemoryGame<String>.Theme(name: "play", cardsSet: ["⚽️", "🪀",  "🎾", "🏋🏻", "🥌", "⛸️",  "🎸","🚣‍♀️" ], pairsOfCards: 8, cardColor: .mint)
-    private static var mess = MemoryGame<String>.Theme(name: "mess", cardsSet:["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"], pairsOfCards:14 , cardColor: .orange)
-    private static var themes: Array<MemoryGame.Theme> = [car, food, play, mess]
+    typealias Card = MemoryGame<String>.Card
+    typealias Theme = MemoryGame<String>.Theme
+    
+    private static var car = Theme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺", ], pairsOfCards: 11, cardColor: .red)
+    private static var food = Theme(name: "food", cardsSet: ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝", ], pairsOfCards: 11, cardColor: .blue)
+    private static var play = Theme(name: "play", cardsSet: ["⚽️", "🪀",  "🎾", "🏋🏻", "🥌", "⛸️",  "🎸","🚣‍♀️" ], pairsOfCards: 8, cardColor: .mint)
+    private static var mess = Theme(name: "mess", cardsSet:["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"], pairsOfCards:14 , cardColor: .orange)
+    private static var themes: Array<Theme> = [car, food, play, mess]
     private static var chosenTheme = themes.randomElement()!
     
     //生成内容的函数 独立出来,让代码更加简洁
@@ -32,7 +35,7 @@ class EmojiMemoryGame: ObservableObject {
     }
  
     //创建一个model,并通过“private”保护它不被view直接修改,(set)表示UI可以看不能改(也可以另外搞个变量来返回model.cards),@Published表示只要model改变就广播
-    @Published private(set) var model: MemoryGame<String> = createMemoryGame(randomTheme: chosenTheme.cardsSet )
+    @Published private(set) var model = createMemoryGame(randomTheme: chosenTheme.cardsSet )
     
     var cards: Array<MemoryGame<String>.Card> {
         model.cards
