@@ -10,11 +10,11 @@ import SwiftUI
 
 //ObservableObject表示可以广播改变
 class EmojiMemoryGame: ObservableObject {
-    static var car = Theme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺", ], pairsOfCards: 11, cardColor: .red)
-    static var food = Theme(name: "food", cardsSet: ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝", ], pairsOfCards: 11, cardColor: .blue)
-    static var play = Theme(name: "play", cardsSet: ["⚽️", "🪀",  "🎾", "🏋🏻", "🥌", "⛸️",  "🎸","🚣‍♀️" ], pairsOfCards: 8, cardColor: .mint)
-    static var mess = Theme(name: "mess", cardsSet:["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"], pairsOfCards:14 , cardColor: .orange)
-    static var themes: Array<Theme> = [car, food, play, mess]
+    static var car = MemoryGame<String>.Theme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺", ], pairsOfCards: 11, cardColor: .red)
+    static var food = MemoryGame<String>.Theme(name: "food", cardsSet: ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝", ], pairsOfCards: 11, cardColor: .blue)
+    static var play = MemoryGame<String>.Theme(name: "play", cardsSet: ["⚽️", "🪀",  "🎾", "🏋🏻", "🥌", "⛸️",  "🎸","🚣‍♀️" ], pairsOfCards: 8, cardColor: .mint)
+    static var mess = MemoryGame<String>.Theme(name: "mess", cardsSet:["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"], pairsOfCards:14 , cardColor: .orange)
+    static var themes: Array<MemoryGame.Theme> = [car, food, play, mess]
     static var chosenTheme = themes.randomElement()!
     
     //生成内容的函数 独立出来,让代码更加简洁
@@ -38,7 +38,7 @@ class EmojiMemoryGame: ObservableObject {
         model.cards
     }
     
-    var currentTheme: Theme {
+    var currentTheme: MemoryGame<String>.Theme {
         model.theme
     }
     
@@ -50,10 +50,5 @@ class EmojiMemoryGame: ObservableObject {
         
     }
     
-    struct Theme {
-        var name: String
-        var cardsSet: Array<String>
-        var pairsOfCards: Int
-        var cardColor: Color
-    }
+   
 }
