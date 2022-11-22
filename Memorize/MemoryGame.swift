@@ -16,35 +16,8 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
     private(set) var score: Int
    
     private var indexOfTheOneAndOnlyFaceUpCard: Int? {
-        get {
-            //朝上的卡片数组
-            var faceUpCardIndices = [Int]()
-            //遍历cards找到朝上的卡
-            for index in cards.indices {
-                if cards[index].isFaceUp{
-                    faceUpCardIndices.append(index)
-                }
-            }
-            
-            //如果有卡片朝上就返回它
-            if faceUpCardIndices.count == 1{
-                return faceUpCardIndices.first
-            }else{
-                return nil
-            }
-        }
-        
-        //将给indexOfTheOneAndOnlyFaceUpCard赋予的值存入,并让其他卡都翻到背面
-        set {
-            for index in cards.indices{
-                //newValue表示被赋予的值
-                if index != newValue {
-                    cards[index].isFaceUp = false
-                } else {
-                    cards[index].isFaceUp = true
-                }
-            }
-        }
+        get { cards.indices.filter({ cards[$0].isFaceUp }).oneAndOnly }
+        set { cards.indices.forEach { cards[$0].isFaceUp = ($0 == newValue) } }
     }
    
     mutating func choose(_ card: Card){
@@ -111,5 +84,17 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
         let cardsSet: Array<String>
         let pairsOfCards: Int
         let cardColor: Color
+    }
+    
+}
+
+extension Array{
+    //不指定类型
+    var oneAndOnly: Element? {
+        if count == 1{
+            return first
+        } else {
+            return nil
+        }
     }
 }
