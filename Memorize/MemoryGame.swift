@@ -55,10 +55,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
 
     
     //需要卡片对数量和一个可以给int然后得到卡片内容的函数
-    init(numberOfPairsOfCards: Int,theme chosenTheme: Theme, creatCardContent: (Int) -> CardContent) {
+    init(theme chosenTheme: Theme, creatCardContent: (Int) -> CardContent) {
         theme = chosenTheme
         cards = Array<Card>()
-        
+        //随机给予卡片对数
+        let numberOfPairsOfCards = Int.random(in: 2..<chosenTheme.pairsOfCards+1)
         // 添加numberOfPairsOfCards 2倍的卡片到数组
         for pairIndex in 0..<numberOfPairsOfCards{
             let content = creatCardContent(pairIndex)
