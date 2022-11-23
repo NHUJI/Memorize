@@ -15,8 +15,8 @@ struct EmojiMemoryGameView: View {
         VStack {
             Text(game.currentTheme.name).font(.largeTitle).foregroundColor(game.currentTheme.cardColor)
             Text("score: \(game.model.score)").foregroundColor(game.currentTheme.cardColor)
-            ScrollView {
-                CardsView
+            AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+                cardView(for:  card)
             }
             .foregroundColor(game.currentTheme.cardColor)
             .padding(.horizontal)
@@ -29,29 +29,13 @@ struct EmojiMemoryGameView: View {
         }
     }
     
-    var CardsView: some View{
-        //TODO: 根据卡片数量决定一行显示多少
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: cardsWidth(cardsNumber: game.cards.count) ))]){
-            ForEach(game.cards) { card in
-                    CardView(card)
-                        .aspectRatio(2/3, contentMode: .fit)
-                        .onTapGesture {
-                            game.choose(card)
-                            //print(game.cards)
-                        }
-            }
-        }
-    }
-    private func cardsWidth(cardsNumber: Int) -> CGFloat {
-        if cardsNumber <= 4 {
-            return 120
-        } else if cardsNumber <= 10{
-            return 80
-        } else if cardsNumber <= 20{
-            return 70
-        } else {
-            return 50
-        }
+    @ViewBuilder private func cardView(for card: EmojiMemoryGame.Card) -> some View {
+            CardView(card)
+                .padding(4)
+                .onTapGesture {
+                    game.choose(card)
+                }
+        
     }
     
 
@@ -94,7 +78,7 @@ struct CardView: View{
     
     //去掉代码中的魔法数字
     private struct DrawingConstants {
-        static let cornerRadius: CGFloat = 20
+        static let cornerRadius: CGFloat = 10
         static let lineWidth: CGFloat = 3
         static let fontScale: CGFloat = 0.7
         static let cardOpacity: CGFloat = 0.3

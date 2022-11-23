@@ -21,8 +21,8 @@ class EmojiMemoryGame: ObservableObject {
     private static var chosenTheme = themes.randomElement()!
     
     //生成内容的函数 独立出来,让代码更加简洁
-    static func createMemoryGame(randomTheme: EmojiMemoryGame.Theme) -> MemoryGame<String> {
-        //生成model需要卡片对的数量和生成卡片内容的函数
+    static func createMemoryGame(randomTheme: Theme) -> MemoryGame<String> {
+        //生成model包括主题和卡片
         MemoryGame<String>(theme: chosenTheme){ pairIndex in
             //使用了全名
             randomTheme.cardsSet[pairIndex]
