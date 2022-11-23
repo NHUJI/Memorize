@@ -20,6 +20,7 @@ struct EmojiMemoryGameView: View {
             }
             .foregroundColor(game.currentTheme.cardColor)
             .padding(.horizontal)
+            
             Button(action: {
                 game.newGame()
             }, label:{
