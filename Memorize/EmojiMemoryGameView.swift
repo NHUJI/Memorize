@@ -31,7 +31,7 @@ struct EmojiMemoryGameView: View {
     
     @ViewBuilder private func cardView(for card: EmojiMemoryGame.Card) -> some View {
             CardView(card)
-                .padding(4)
+                .padding(DrawingConstants.padding)
                 .onTapGesture {
                     game.choose(card)
                 }
@@ -71,18 +71,12 @@ struct CardView: View{
         }
     }
     
-    //单独函数让view结构保持简洁
+    //单独函数让view结构保持简洁,将卡片size获得后稍微缩小一点提供给字符显示用
     private func font(in size: CGSize ) -> Font {
         Font.system(size: min(size.width, size.height) * DrawingConstants.fontScale)
     }
     
-    //去掉代码中的魔法数字
-    private struct DrawingConstants {
-        static let cornerRadius: CGFloat = 10
-        static let lineWidth: CGFloat = 3
-        static let fontScale: CGFloat = 0.7
-        static let cardOpacity: CGFloat = 0.3
-    }
+   
     
     
     
@@ -90,8 +84,14 @@ struct CardView: View{
 }
 
 
-
-
+//去掉代码中的魔法数字
+private struct DrawingConstants {
+    static let cornerRadius: CGFloat = 10
+    static let lineWidth: CGFloat = 3
+    static let fontScale: CGFloat = 0.7
+    static let cardOpacity: CGFloat = 0.3
+    static let padding: CGFloat = 4
+}
 
 
 

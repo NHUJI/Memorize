@@ -10,6 +10,7 @@ import SwiftUI
 struct AspectVGrid<Item, ItemView>: View where Item: Identifiable, ItemView: View{
     var items: [Item]
     var aspectRatio: CGFloat
+    //接受一个可识别的东西并返回视图的函数
     var content: (Item) -> ItemView
     
     init(items: [Item], aspectRatio: CGFloat, @ViewBuilder content: @escaping (Item) -> ItemView) {
@@ -23,6 +24,7 @@ struct AspectVGrid<Item, ItemView>: View where Item: Identifiable, ItemView: Vie
             VStack{
                 let width: CGFloat = widthThatFits(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio)
                 ScrollView{
+                    //为了计算卡片宽度更容易spacing: 0让间距为0,之后再加入padding
                     LazyVGrid(columns: [adaptiveGridItem(width: width)], spacing: 0){
                         ForEach(items) { item in
                             content(item).aspectRatio(aspectRatio, contentMode: .fit)
@@ -34,6 +36,7 @@ struct AspectVGrid<Item, ItemView>: View where Item: Identifiable, ItemView: Vie
         }
     }
     
+    //取消卡片间距(为了设置spacing: 0所以独立出来)
     private func adaptiveGridItem(width: CGFloat) -> GridItem {
         var gridItem = GridItem(.adaptive(minimum: width))
         gridItem.spacing = 0
@@ -57,10 +60,7 @@ struct AspectVGrid<Item, ItemView>: View where Item: Identifiable, ItemView: Vie
         }
         return floor(size.width / CGFloat(columnCount))
     }
-    
-    
-    
-    
+
     
     
 }
