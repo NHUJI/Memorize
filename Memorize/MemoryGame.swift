@@ -79,7 +79,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
         let content: CardContent
         let id: Int
     }
-    
+    //面向显示的东西也许不应该放在model里,而是modelView里
     struct Theme {
         let name: String
         let cardsSet: Array<String>

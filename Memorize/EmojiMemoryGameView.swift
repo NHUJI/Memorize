@@ -54,21 +54,12 @@ struct CardView: View{
     var body: some View{
         GeometryReader { geometry in
             ZStack{
-                let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-                if card.isFaceUp{
-                    shape.fill().foregroundColor(.white)
-                    shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
-                    Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90)).padding(5).opacity(0.5)
-                    Text(card.content).font(font(in: geometry.size))
-                }else if card.isMatched{
-                    Text(" ").font(font(in: geometry.size))
-                    shape.opacity(DrawingConstants.cardOpacity)
-                }else{
-                    shape.fill()
-                    //全名Font.largeTitle,是static变量
-                    Text(" ").font(font(in: geometry.size))
-                }
-            }
+                Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90))
+                    .padding(5)
+                    .opacity(0.5)
+                Text(card.content)
+                    .font(font(in: geometry.size))
+            }.cardify(isFaceUp: card.isFaceUp)
         }
     }
     
@@ -87,8 +78,6 @@ struct CardView: View{
 
 //去掉代码中的魔法数字
 private struct DrawingConstants {
-    static let cornerRadius: CGFloat = 10
-    static let lineWidth: CGFloat = 3
     static let fontScale: CGFloat = 0.6
     static let cardOpacity: CGFloat = 0.3
     static let padding: CGFloat = 4
