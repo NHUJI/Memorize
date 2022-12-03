@@ -11,7 +11,7 @@ struct Cardify: Animatable, ViewModifier {
     init(isFaceUp: Bool) {
         rotation = isFaceUp ? 0 : 180
     }
-    
+    //相当于在不断提供不同数值的下面body的部分来做动画
     var animatableData: Double {
         get { rotation }
         set { rotation = newValue}

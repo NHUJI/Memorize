@@ -25,18 +25,37 @@ struct EmojiMemoryGameView: View {
         }
     }
     
+    @State private var dealt = Set<Int>()
+    
+    private func deal(_ card: EmojiMemoryGame.Card) {
+        dealt.insert(card.id)
+    }
+    
+    private func isUndealt(_ card: EmojiMemoryGame.Card) -> Bool {
+        return !dealt.contains(card.id)
+    }
+    
     var gameBody: some View {
         AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-            if card.isMatched && !card.isFaceUp{
+            if isUndealt(card) || (card.isMatched && !card.isFaceUp) {
                 Color.clear
             } else {
                 CardView(card)
                     .padding(DrawingConstants.padding)
+                    .transition(AnyTransition.asymmetric(insertion: .scale, removal: .slide))
                     .onTapGesture {
-                        withAnimation(.easeInOut) {
+                        withAnimation {
                             game.choose(card)
                         }
                     }
+            }
+        }
+        .onAppear {
+            withAnimation {
+                //为了卡片出现的效果,当AspectVGrid出现后才显示卡片
+                for card in game.cards {
+                    deal(card)
+                }
             }
         }
         .foregroundColor(game.currentTheme.cardColor)
