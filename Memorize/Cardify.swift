@@ -7,23 +7,32 @@
 
 import SwiftUI
 
-struct Cardify: ViewModifier {
-    var isFaceUp: Bool
-
+struct Cardify: Animatable, ViewModifier {
+    init(isFaceUp: Bool) {
+        rotation = isFaceUp ? 0 : 180
+    }
+    
+    var animatableData: Double {
+        get { rotation }
+        set { rotation = newValue}
+    }
+    
+    var rotation: Double
+    
     func body(content: Content) -> some View {
         ZStack{
             let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-            if isFaceUp{
+            if rotation < 90 {
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
-               
             }else{
                 shape.fill()
             }
             // 由于content跟随isFaceUp在屏幕上出现或者消失,第二张卡isMatched就不会有改变->动画,通过透明度设置解决这个问题
             content
-                .opacity(isFaceUp ? 1:0)
+                .opacity(rotation<90 ? 1 : 0)
         }
+        .rotation3DEffect(Angle.degrees(rotation), axis:(0, 1, 0))
     }
     private struct DrawingConstants {
         static let cornerRadius: CGFloat = 10

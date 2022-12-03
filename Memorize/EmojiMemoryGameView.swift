@@ -15,32 +15,52 @@ struct EmojiMemoryGameView: View {
         VStack {
             Text(game.currentTheme.name).font(.largeTitle).foregroundColor(game.currentTheme.cardColor)
             Text("score: \(game.model.score)").foregroundColor(game.currentTheme.cardColor)
-            AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-                cardView(for:  card)
+            gameBody.padding(.horizontal)
+            HStack{
+                shuffle
+                Spacer()
+                newGame
             }
-            .foregroundColor(game.currentTheme.cardColor)
-            .padding(.horizontal)
+            .padding()
+        }
+    }
+    
+    var gameBody: some View {
+        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+            if card.isMatched && !card.isFaceUp{
+                Color.clear
+            } else {
+                CardView(card)
+                    .padding(DrawingConstants.padding)
+                    .onTapGesture {
+                        withAnimation(.easeInOut) {
+                            game.choose(card)
+                        }
+                    }
+            }
+        }
+        .foregroundColor(game.currentTheme.cardColor)
+    }
+    
+    var shuffle: some View {
+        Button("Shuffle"){
+            withAnimation {
+                game.shuffle()
+            }
             
-            Button(action: {
+        }
+    }
+    
+    var newGame: some View {
+        //TODO: 修复新游戏后卡片动画没有重置的问题
+        Button(action: {
+            withAnimation() {
                 game.newGame()
-            }, label:{
-                Text("New Game").font(.largeTitle)
-            })
-        }
+            }
+        }, label:{
+            Text("New Game")
+        })
     }
-    
-    @ViewBuilder private func cardView(for card: EmojiMemoryGame.Card) -> some View {
-        if card.isMatched && !card.isFaceUp{
-            Color.clear
-        } else {
-            CardView(card)
-                .padding(DrawingConstants.padding)
-                .onTapGesture {
-                    game.choose(card)
-                }
-        }
-    }
-    
 
     
 }
@@ -64,9 +84,9 @@ struct CardView: View{
                     //匹配成功后改变字符角度,360 : 0相当于转了一圈
                     .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
                     //
-                    .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: false),value: card.isMatched) //iOS15开始要求加入触发动画的改变值
+                    .animation(Animation.linear(duration: 1).repeatForever(autoreverses: false),value: card.isMatched) //iOS15开始要求加入触发动画的改变值
                     .font(.system(size: DrawingConstants.fontSize))
-                    .scaleEffect(scale(thatFits: geometry.size )) //这两条是为了解决font不适用于动画的问题,现在已经不存在这个问题
+                    .scaleEffect(scale(thatFits: geometry.size ))
             }.cardify(isFaceUp: card.isFaceUp)
         }
     }

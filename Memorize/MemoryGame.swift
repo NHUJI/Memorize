@@ -67,10 +67,13 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
             cards.append(Card(content: content,id: pairIndex*2+1))
         }
         //将创建的卡片打乱
-        cards = cards.shuffled()
+        cards.shuffle() //与shuffled不同
         score = 0
     }
     
+    mutating func shuffle() {
+        cards.shuffle()
+    }
    
     struct Card: Identifiable {
         var isFaceUp = false
