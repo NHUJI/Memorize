@@ -30,12 +30,15 @@ struct EmojiMemoryGameView: View {
     }
     
     @ViewBuilder private func cardView(for card: EmojiMemoryGame.Card) -> some View {
+        if card.isMatched && !card.isFaceUp{
+            Color.clear
+        } else {
             CardView(card)
                 .padding(DrawingConstants.padding)
                 .onTapGesture {
                     game.choose(card)
                 }
-        
+        }
     }
     
 
@@ -58,16 +61,22 @@ struct CardView: View{
                     .padding(5)
                     .opacity(0.5)
                 Text(card.content)
-                    .font(font(in: geometry.size))
+                    //匹配成功后改变字符角度,360 : 0相当于转了一圈
+                    .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
+                    //
+                    .animation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: false),value: card.isMatched) //iOS15开始要求加入触发动画的改变值
+                    .font(.system(size: DrawingConstants.fontSize))
+                    .scaleEffect(scale(thatFits: geometry.size )) //这两条是为了解决font不适用于动画的问题,现在已经不存在这个问题
             }.cardify(isFaceUp: card.isFaceUp)
         }
     }
     
-    //单独函数让view结构保持简洁,将卡片size获得后稍微缩小一点提供给字符显示用
-    private func font(in size: CGSize ) -> Font {
-        Font.system(size: min(size.width, size.height) * DrawingConstants.fontScale)
-    }
+    // the "scale factor" to scale our Text up so that it fits the geometry.size offered to us
+   private func scale(thatFits size: CGSize) -> CGFloat {
+       min(size.width, size.height) / (DrawingConstants.fontSize / DrawingConstants.fontScale)
+   }
     
+  
    
     
     
@@ -78,6 +87,7 @@ struct CardView: View{
 
 //去掉代码中的魔法数字
 private struct DrawingConstants {
+    static let fontSize: CGFloat = 32
     static let fontScale: CGFloat = 0.6
     static let cardOpacity: CGFloat = 0.3
     static let padding: CGFloat = 4

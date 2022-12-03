@@ -16,10 +16,13 @@ struct Cardify: ViewModifier {
             if isFaceUp{
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
-                content
+               
             }else{
                 shape.fill()
             }
+            // 由于content跟随isFaceUp在屏幕上出现或者消失,第二张卡isMatched就不会有改变->动画,通过透明度设置解决这个问题
+            content
+                .opacity(isFaceUp ? 1:0)
         }
     }
     private struct DrawingConstants {
