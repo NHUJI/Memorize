@@ -11,18 +11,25 @@ import SwiftUI
 //结构:变量的集合 不仅有变量也可以有函数
 struct EmojiMemoryGameView: View {
     @ObservedObject var game: EmojiMemoryGame
+    
+    @Namespace private var dealingNamespace
+    
     var body: some View {
-        VStack {
-            Text(game.currentTheme.name).font(.largeTitle).foregroundColor(game.currentTheme.cardColor)
-            Text("score: \(game.model.score)").foregroundColor(game.currentTheme.cardColor)
-            gameBody.padding(.horizontal)
-            HStack{
-                shuffle
-                Spacer()
-                newGame
+        ZStack(alignment: .bottom) {
+            VStack {
+                Text(game.currentTheme.name).font(.largeTitle).foregroundColor(game.currentTheme.cardColor)
+                Text("score: \(game.model.score)").foregroundColor(game.currentTheme.cardColor)
+                gameBody
+                HStack {
+                    shuffle
+                    Spacer()
+                    newGame
+                }
+                .padding(.horizontal)
             }
-            .padding()
+            deckBody
         }
+        .padding()
     }
     
     @State private var dealt = Set<Int>()
@@ -35,14 +42,28 @@ struct EmojiMemoryGameView: View {
         return !dealt.contains(card.id)
     }
     
+    private func dealAnimation(for card: EmojiMemoryGame.Card) -> Animation {
+        var delay = 0.0
+        if let index = game.cards.firstIndex(where: { $0.id == card.id }) {
+            delay = Double(index) * (CardConstants.totalDealDuration / Double(game.cards.count))
+        }
+        return Animation.easeInOut(duration: CardConstants.dealDuration).delay(delay)
+    }
+    
+    private func zIndex(of card: EmojiMemoryGame.Card) -> Double {
+        -Double(game.cards.firstIndex(where: { $0.id == card.id }) ?? 0)
+    }
+    
     var gameBody: some View {
-        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+        AspectVGrid(items: game.cards, aspectRatio: DrawingConstants.aspectRatio) { card in
             if isUndealt(card) || (card.isMatched && !card.isFaceUp) {
                 Color.clear
             } else {
                 CardView(card)
+                    .matchedGeometryEffect(id: card.id, in: dealingNamespace) //由于可以有多个match..,所以用in的部分来区别
                     .padding(DrawingConstants.padding)
-                    .transition(AnyTransition.asymmetric(insertion: .scale, removal: .slide))
+                    .transition(AnyTransition.asymmetric(insertion: .identity, removal: .identity))
+                    .zIndex(zIndex(of: card))
                     .onTapGesture {
                         withAnimation {
                             game.choose(card)
@@ -50,15 +71,29 @@ struct EmojiMemoryGameView: View {
                     }
             }
         }
-        .onAppear {
-            withAnimation {
-                //为了卡片出现的效果,当AspectVGrid出现后才显示卡片
-                for card in game.cards {
+        .foregroundColor(game.currentTheme.cardColor)
+    }
+    
+    var deckBody: some View {
+        ZStack {
+            ForEach(game.cards.filter(isUndealt)) { card in
+                CardView(card)
+                    .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                    .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .identity))
+                    .zIndex(zIndex(of: card))
+            }
+        }
+        .frame(width: DrawingConstants.undealtWidth, height: DrawingConstants.undealtHeigh)
+        .foregroundColor(game.currentTheme.cardColor)
+        .onTapGesture {
+            //为了卡片出现的效果,当AspectVGrid出现后才显示卡片
+            for card in game.cards {
+                withAnimation(dealAnimation(for: card)) {
                     deal(card)
                 }
             }
+            
         }
-        .foregroundColor(game.currentTheme.cardColor)
     }
     
     var shuffle: some View {
@@ -74,14 +109,22 @@ struct EmojiMemoryGameView: View {
         //TODO: 修复新游戏后卡片动画没有重置的问题
         Button(action: {
             withAnimation() {
+                dealt = []
                 game.newGame()
             }
         }, label:{
-            Text("New Game")
+            Text("restart")
         })
     }
 
-    
+    private struct CardConstants {
+           static let color = Color.red
+           static let aspectRatio: CGFloat = 2/3
+           static let dealDuration: Double = 0.5
+           static let totalDealDuration: Double = 2
+           static let undealtHeight: CGFloat = 90
+           static let undealtWidth = undealtHeight * aspectRatio
+       }
 }
 
 
@@ -126,10 +169,13 @@ struct CardView: View{
 
 //去掉代码中的魔法数字
 private struct DrawingConstants {
+    static let aspectRatio: CGFloat = 2/3
     static let fontSize: CGFloat = 32
     static let fontScale: CGFloat = 0.6
     static let cardOpacity: CGFloat = 0.3
     static let padding: CGFloat = 4
+    static let undealtHeigh: CGFloat = 90
+    static let undealtWidth: CGFloat = undealtHeigh * aspectRatio
 }
 
 

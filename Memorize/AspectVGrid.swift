@@ -23,12 +23,10 @@ struct AspectVGrid<Item, ItemView>: View where Item: Identifiable, ItemView: Vie
         GeometryReader { geometry in
             VStack{
                 let width: CGFloat = widthThatFits(itemCount: items.count, in: geometry.size, itemAspectRatio: aspectRatio)
-                ScrollView{
-                    //为了计算卡片宽度更容易spacing: 0让间距为0,之后再加入padding
-                    LazyVGrid(columns: [adaptiveGridItem(width: width)], spacing: 0){
-                        ForEach(items) { item in
-                            content(item).aspectRatio(aspectRatio, contentMode: .fit)
-                        }
+                //为了计算卡片宽度更容易spacing: 0让间距为0,之后再加入padding
+                LazyVGrid(columns: [adaptiveGridItem(width: width)], spacing: 0){
+                    ForEach(items) { item in
+                        content(item).aspectRatio(aspectRatio, contentMode: .fit)
                     }
                 }
                 Spacer(minLength: 0)
