@@ -106,14 +106,13 @@ struct EmojiMemoryGameView: View {
     }
     
     var newGame: some View {
-        //TODO: 修复新游戏后卡片动画没有重置的问题
         Button(action: {
             withAnimation() {
                 dealt = []
                 game.newGame()
             }
         }, label:{
-            Text("restart")
+            Text("Restart")
         })
     }
 
