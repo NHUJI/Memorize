@@ -130,6 +130,8 @@ struct EmojiMemoryGameView: View {
 struct CardView: View{
     private let card: EmojiMemoryGame.Card
     
+    @State private var animatedBonusRemaining: Double = 0
+    
     //这样就不需要输入CardView(card: card),不过这样有点多余
     init(_ card: EmojiMemoryGame.Card){
         self.card = card
@@ -138,9 +140,36 @@ struct CardView: View{
     var body: some View{
         GeometryReader { geometry in
             ZStack{
-                Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90))
-                    .padding(5)
-                    .opacity(0.5)
+                // Group is a "bag of Lego" container
+                // it's useful for propagating view modifiers to multiple views
+                // (as we are doing below, for example, with opacity)
+                Group {
+                    // card.isConsumingBonusTime is changed by the Model quite often
+                    // it changes any time a card's isFaceUp changes (or isMatched)
+                    // so the two Pies here are swapping back and forth as isFaceUp changes
+                    // any time we are not consuming bonus time, the lower Pie appears
+                    // (it is not animated and is just showing how much time is left)
+                    // any time we ARE consuming bonus time, the upper Pie appears
+                    // and when it appears (onAppear), it starts animating its own endAngle
+                    // by first setting its animatedBonusRemaining to however much time is remaining
+                    // then animating setting that to zero inside an explicit animation
+                    // (and since this represents a change to animatedBonusRemaining, it will animate that change)
+                    // if isConsumingBonusTime changes in the middle of the animation
+                    // the top Pie below will simply be removed from the UI and the animation abandoned
+                    if card.isConsumingBonusTime {
+                        Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: (1-animatedBonusRemaining)*360-90))
+                            .onAppear {
+                                animatedBonusRemaining = card.bonusRemaining
+                                withAnimation(.linear(duration: card.bonusTimeRemaining)) {
+                                    animatedBonusRemaining = 0
+                                }
+                            }
+                    } else {
+                        Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: (1-card.bonusRemaining)*360-90))
+                    }
+                }
+                .padding(5)
+                .opacity(0.5)
                 Text(card.content)
                     //匹配成功后改变字符角度,360 : 0相当于转了一圈
                     .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
@@ -189,7 +218,7 @@ private struct DrawingConstants {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGame()
-        game.choose(game.cards.first!)
+//        game.choose(game.cards.first!)
         //可以通过设置多个EmojiMemoryGameView()来看不同的模拟效果
         return EmojiMemoryGameView(game: game)
         
