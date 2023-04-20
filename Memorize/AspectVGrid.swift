@@ -3,7 +3,7 @@
 //  Memorize
 //
 //  Created by huhu on 2022/11/23.
-//
+//  作用: 显示卡片组的视图
 
 import SwiftUI
 

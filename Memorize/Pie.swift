@@ -4,7 +4,7 @@
 //
 //  Created by huhu on 2022/11/25.
 //
-//可以生成饼状图形的
+//  可以生成饼状图形的动画
 
 import SwiftUI
 
@@ -13,11 +13,15 @@ struct Pie: Shape {
     var endAngle: Angle
     var clockwise: Bool = false
     
+    // the Shape protocol inherits from Animatable
+    // and this var is the only thing in Animatable
+    // so by implementing it to get/set our pair of angles
+    // we are thus animatable
     var animatableData: AnimatablePair<Double, Double> {
         get {
             AnimatablePair(startAngle.radians, endAngle.radians)
         }
-        set{
+        set {
             startAngle = Angle.radians(newValue.first)
             endAngle = Angle.radians(newValue.second)
         }
@@ -31,6 +35,8 @@ struct Pie: Shape {
             y: center.y + radius * CGFloat(sin(startAngle.radians))
         )
         
+        // we did this by creating a path and returning it
+        // but there is also a Path { } version we could have used
         var p = Path()
         p.move(to: center)
         p.addLine(to: start)

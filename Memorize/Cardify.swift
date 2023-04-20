@@ -3,7 +3,7 @@
 //  Memorize
 //
 //  Created by huhu on 2022/12/1.
-//
+//  ViewModifier 根据卡片的翻转状态(isFaceup)给表情添加卡片效果
 
 import SwiftUI
 
@@ -32,7 +32,7 @@ struct Cardify: Animatable, ViewModifier {
             content
                 .opacity(rotation<90 ? 1 : 0)
         }
-        .rotation3DEffect(Angle.degrees(rotation), axis:(0, 1, 0))
+        .rotation3DEffect(Angle.degrees(rotation), axis:(0, 1, 0)) // 实现翻转动画的效果
     }
     private struct DrawingConstants {
         static let cornerRadius: CGFloat = 10
@@ -41,7 +41,7 @@ struct Cardify: Animatable, ViewModifier {
 
 }
 
-//方便调用所以添加rxtension
+//方便调用所以添加extension
 extension View {
     func cardify(isFaceUp: Bool) -> some View {
         self.modifier(Cardify(isFaceUp: isFaceUp))

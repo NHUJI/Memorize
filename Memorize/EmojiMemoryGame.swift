@@ -4,7 +4,7 @@
 //
 //  Created by huhu on 2022/11/20.
 //
-//MVVM的ViewModel 并且是emoji的 并且VM主要使用Class
+//  MVVM的ViewModel 并且是emoji的 并且VM主要使用Class
 
 import SwiftUI
 
@@ -12,7 +12,7 @@ import SwiftUI
 class EmojiMemoryGame: ObservableObject {
     typealias Card = MemoryGame<String>.Card
     typealias Theme = MemoryGame<String>.Theme
-    
+    // TODO: 这一部分需要独立出游戏的model
     private static var car = Theme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺", ], pairsOfCards: 11, cardColor: .red)
     private static var food = Theme(name: "food", cardsSet: ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝", ], pairsOfCards: 11, cardColor: .blue)
     private static var play = Theme(name: "play", cardsSet: ["⚽️", "🪀",  "🎾", "🏋🏻", "🥌", "⛸️",  "🎸","🚣‍♀️" ], pairsOfCards: 8, cardColor: .mint)
