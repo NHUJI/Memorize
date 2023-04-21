@@ -8,13 +8,42 @@
 import SwiftUI
 
 struct ThemeChooserView: View {
+    @EnvironmentObject var themes: ThemeChooser // 从环境中获取主题(VM)
+    @State private var editMode: EditMode = .inactive // 编辑模式
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            List {
+                ForEach(themes.themes) { theme in
+                    NavigationLink(value: theme) {
+                        VStack {
+                            HStack {
+                                Text(theme.name.capitalized) // 首字母大写
+                                    .font(.largeTitle)
+                                    .foregroundColor(theme.cardColor)
+                                Spacer() // 使用它把名字推到最左边
+                            }
+                            HStack {
+                                // TODO: 之后这里需要根据数据判断选择
+                                Text("\(theme.cardsSet.count) pairs")
+                                Text(theme.cardsSet.prefix(8).joined(separator: "") + (theme.cardsSet.count > 8 ? " ..." : "")) // 将数组中的元素拼接成字符串
+                                Spacer()
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Memorize") // 列表标题
+            .navigationDestination(for: Theme.self) { _ in
+                // TODO: destination在game修改完成后替换成真正可用的
+                EmojiMemoryGameView(game: EmojiMemoryGame())
+            }
+        }
     }
 }
 
 struct ThemeChooserView_Previews: PreviewProvider {
     static var previews: some View {
-        ThemeChooserView()
+        ThemeChooserView().environmentObject(ThemeChooser(name: "Preview"))
     }
 }
