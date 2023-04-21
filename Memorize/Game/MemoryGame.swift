@@ -9,8 +9,10 @@
 // Foundation 包括数组字典等基础结构
 import Foundation
 import SwiftUI
+
 // <CardContent>:使用泛型增加扩展性,比如卡片可以接受图片、String和更多类型的数据作为卡面,并且CardContent类型要求可以进行比较
 struct MemoryGame<CardContent> where CardContent: Equatable {
+    typealias Theme = ThemeChooser.Theme // 给Theme结构加上别名,减少去掉本身结构后的修改
     private(set) var cards: [Card]
     private(set) var theme: Theme
     private(set) var score: Int
@@ -150,14 +152,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
             pastFaceUpTime = faceUpTime
             lastFaceUpDate = nil
         }
-    }
-
-    // 面向显示的东西也许不应该放在model里,而是modelView里
-    struct Theme {
-        let name: String
-        let cardsSet: [String]
-        let pairsOfCards: Int
-        let cardColor: Color
     }
 }
 

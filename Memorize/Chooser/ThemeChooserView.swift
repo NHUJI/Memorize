@@ -24,7 +24,7 @@ struct ThemeChooserView: View {
                                 Spacer() // 使用它把名字推到最左边
                             }
                             HStack {
-                                // TODO: 之后这里需要根据数据判断选择
+                                // TODO: 之后这里需要根据数据判断选择这个主题需要的卡片数量
                                 Text("\(theme.cardsSet.count) pairs")
                                 Text(theme.cardsSet.prefix(8).joined(separator: "") + (theme.cardsSet.count > 8 ? " ..." : "")) // 将数组中的元素拼接成字符串
                                 Spacer()
@@ -34,9 +34,9 @@ struct ThemeChooserView: View {
                 }
             }
             .navigationTitle("Memorize") // 列表标题
-            .navigationDestination(for: Theme.self) { _ in
-                // TODO: destination在game修改完成后替换成真正可用的
-                EmojiMemoryGameView(game: EmojiMemoryGame())
+            // 这里的for似乎要放NavigationLink发送来接收的类型才行
+            .navigationDestination(for: ThemeChooser.Theme.self) { theme in
+                EmojiMemoryGameView(game: EmojiMemoryGame(chosenTheme: theme))
             }
         }
     }

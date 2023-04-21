@@ -190,7 +190,9 @@ private enum DrawingConstants {
 // preview需要的,不需要看它
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let game = EmojiMemoryGame()
+        let theme = ThemeChooser.Theme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺"], cardColor: .red, id: 13, pairsOfCards: 6)
+        
+        let game = EmojiMemoryGame(chosenTheme: theme)
 //        game.choose(game.cards.first!)
         // 可以通过设置多个EmojiMemoryGameView()来看不同的模拟效果
         return EmojiMemoryGameView(game: game)
