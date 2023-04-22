@@ -22,15 +22,15 @@ struct ThemeEditor: View {
             cardCountSection
             colorSection
         }
-        .frame(minWidth: 300, minHeight: 350) // 还有很多其他参数,我们只设置了最小宽高
+        .frame(minWidth: 300, minHeight: 200) // 还有很多其他参数,我们只设置了最小宽高
         .navigationTitle("Edit \(theme.name)") // 设置导航栏标题(只在Navigation导航过来时有效)
     }
-     init(theme: Binding<ThemeChooser.Theme>) {
+
+    init(theme: Binding<ThemeChooser.Theme>) {
         self._theme = theme
         self.selectedColor = theme.wrappedValue.cardColor
     }
 
-   
     // MARK: 表格项
 
     var nameSection: some View {
@@ -135,6 +135,6 @@ struct ThemeEditor: View {
 struct ThemeEditor_Previews: PreviewProvider {
     static var previews: some View {
         @State var theme = ThemeChooser(name: "test").themes.first!
-        ThemeEditor(theme: $theme)
+        ThemeEditor(theme: $theme).previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/300.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/350.0/*@END_MENU_TOKEN@*/))
     }
 }
