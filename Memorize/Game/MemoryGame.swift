@@ -59,9 +59,10 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         // 随机给予卡片对数,但会导致和新创建的卡片id不一样 失去收回的动画
         let randomIdAdder = Int.random(in: 100 ... 2000)
 //        let randomIdAdder = 0
-        let numberOfPairsOfCards = Int.random(in: 3..<chosenTheme.pairsOfCards+1)
+//        let numberOfPairsOfCards = Int.random(in: 1..<chosenTheme.pairsOfCards+1)
+        let numberOfPairsOfCards = chosenTheme.pairsOfCards
         // 添加numberOfPairsOfCards 2倍的卡片到数组
-        for pairIndex in 0..<numberOfPairsOfCards {
+        for pairIndex in 0 ..< numberOfPairsOfCards {
             let content = creatCardContent(pairIndex)
             cards.append(Card(content: content, id: pairIndex*2+randomIdAdder))
             cards.append(Card(content: content, id: pairIndex*2+1+randomIdAdder))

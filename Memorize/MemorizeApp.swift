@@ -13,9 +13,9 @@ struct MemorizeApp: App {
         WindowGroup {
             // 主要显示的内容:
 //            EmojiMemoryGameView(game: game)
-            ThemeChooserView().environmentObject(ThemeChooser(name: "Play"))
+            @State var ThemeChooser = ThemeChooser(name: "Play")
+            ThemeChooserView().environmentObject(ThemeChooser)
 //            ThemeEditor()
-
         }
     }
 }

@@ -10,7 +10,8 @@ import SwiftUI
 struct ThemeEditor: View {
 //    @Binding var theme: ThemeChooser.Theme
     // 创建一个测试用的model
-    @State private var theme: ThemeChooser.Theme = ThemeChooser(name: "test").themes.first!
+    // @State private var theme: ThemeChooser.Theme = ThemeChooser(name: "test").themes.first!
+    @Binding var theme: ThemeChooser.Theme
 
     var body: some View {
         // Form可以提供类似系统默认的表单样式
@@ -24,7 +25,12 @@ struct ThemeEditor: View {
         .frame(minWidth: 300, minHeight: 350) // 还有很多其他参数,我们只设置了最小宽高
         .navigationTitle("Edit \(theme.name)") // 设置导航栏标题(只在Navigation导航过来时有效)
     }
+     init(theme: Binding<ThemeChooser.Theme>) {
+        self._theme = theme
+        self.selectedColor = theme.wrappedValue.cardColor
+    }
 
+   
     // MARK: 表格项
 
     var nameSection: some View {
@@ -47,6 +53,7 @@ struct ThemeEditor: View {
                             .onTapGesture { // 点击表情就删除
                                 withAnimation {
                                     theme.cardsSet.removeAll(where: { String($0) == emoji })
+                                    theme.pairsOfCards = min(theme.pairsOfCards, theme.cardsSet.count) // theme.pairsOfCards减少
                                 }
                             }
                     }
@@ -79,15 +86,23 @@ struct ThemeEditor: View {
         }
     }
 
-    var cardCountSection: some View {
-        Section(header: Text("CARD COUNT").font(.system(.body, design: .rounded)).bold()) {
-            Stepper("\(theme.pairsOfCards) Pairs", value: $theme.pairsOfCards, in: 3 ... theme.cardsSet.count) // 2...theme.cardsSet.count表示范围
+    var allCardsSelectedHint: String {
+        if theme.pairsOfCards == theme.cardsSet.count {
+            return " (All cards)"
+        } else {
+            return ""
         }
     }
 
-    @State private var color = Color.red
+    var cardCountSection: some View {
+        Section(header: Text("CARD COUNT").font(.system(.body, design: .rounded)).bold()) {
+            Stepper("\(theme.pairsOfCards) Pairs\(allCardsSelectedHint) ", value: $theme.pairsOfCards, in: 0 ... theme.cardsSet.count) // 3...theme.cardsSet.count表示范围
+        }
+    }
+
+    @State private var color = Color.clear
     let colors: [Color] = [.black, .blue, .brown, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .teal, .yellow]
-    @State private var selectedColor: Color = .black
+    @State private var selectedColor: Color
     let columns = [GridItem(.adaptive(minimum: 60))]
     var colorSection: some View {
         Section(header: Text("COLOR").font(.system(.body, design: .rounded)).bold()) {
@@ -107,6 +122,7 @@ struct ThemeEditor: View {
                             .frame(width: 60, height: 70)
                             .cornerRadius(10)
                             .onTapGesture {
+                                theme.cardColor = color
                                 selectedColor = color
                             }
                     }
@@ -118,6 +134,7 @@ struct ThemeEditor: View {
 
 struct ThemeEditor_Previews: PreviewProvider {
     static var previews: some View {
-        ThemeEditor()
+        @State var theme = ThemeChooser(name: "test").themes.first!
+        ThemeEditor(theme: $theme)
     }
 }
