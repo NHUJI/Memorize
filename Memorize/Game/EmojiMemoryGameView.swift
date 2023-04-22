@@ -17,7 +17,7 @@ struct EmojiMemoryGameView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
-                Text(game.currentTheme.name).font(.largeTitle).foregroundColor(game.currentTheme.cardColor) // 主题
+                Text(game.currentTheme.name.capitalized).font(.largeTitle).foregroundColor(game.currentTheme.cardColor) // 主题
                 Text("score: \(game.model.score)").foregroundColor(game.currentTheme.cardColor) // 分数
                 gameBody // 游戏本体
                 HStack { // 按扭
@@ -96,7 +96,6 @@ struct EmojiMemoryGameView: View {
         }
     }
     
-    // TODO: 需要和new game接合了
     var shuffle: some View {
         Button("Shuffle") {
             withAnimation {
