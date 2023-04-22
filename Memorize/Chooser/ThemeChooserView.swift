@@ -35,8 +35,9 @@ struct ThemeChooserView: View {
             }
             .navigationTitle("Memorize") // 列表标题
             // 这里的for似乎要放NavigationLink发送来接收的类型才行
-            .navigationDestination(for: ThemeChooser.Theme.self) { theme in
-                EmojiMemoryGameView(game: EmojiMemoryGame(chosenTheme: theme))
+            .navigationDestination(for: ThemeChooser.Theme.self) { _ in
+//                EmojiMemoryGameView(game: EmojiMemoryGame(chosenTheme: theme))
+                ThemeEditor()
             }
         }
     }

@@ -81,14 +81,37 @@ struct ThemeEditor: View {
 
     var cardCountSection: some View {
         Section(header: Text("CARD COUNT").font(.system(.body, design: .rounded)).bold()) {
-            Text("\(theme.pairsOfCards) pairs")
+            Stepper("\(theme.pairsOfCards) Pairs", value: $theme.pairsOfCards, in: 3 ... theme.cardsSet.count) // 2...theme.cardsSet.count表示范围
         }
     }
 
+    @State private var color = Color.red
+    let colors: [Color] = [.black, .blue, .brown, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .teal, .yellow]
+    @State private var selectedColor: Color = .black
+    let columns = [GridItem(.adaptive(minimum: 60))]
     var colorSection: some View {
         Section(header: Text("COLOR").font(.system(.body, design: .rounded)).bold()) {
             // TODO: 变成多个颜色可选
-            Text($theme.cardColor.wrappedValue.description)
+            //     Text($theme.cardColor.wrappedValue.description)
+            //     VStack {
+            //     ColorPicker("选择颜色", selection: $color)
+            Text("您选择的颜色: \($selectedColor.wrappedValue.description)")
+                .foregroundColor(selectedColor)
+//        }
+
+            ScrollView {
+                LazyVGrid(columns: columns) {
+                    ForEach(colors, id: \.self) { color in
+                        Rectangle()
+                            .fill(color)
+                            .frame(width: 60, height: 70)
+                            .cornerRadius(10)
+                            .onTapGesture {
+                                selectedColor = color
+                            }
+                    }
+                }
+            }
         }
     }
 }
