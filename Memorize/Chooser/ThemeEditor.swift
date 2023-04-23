@@ -18,9 +18,9 @@ struct ThemeEditor: View {
         Form {
             nameSection
             removeEmojiSection
-//            addEmojiSection
-//            cardCountSection
-//            colorSection
+            addEmojiSection
+            cardCountSection
+            colorSection
         }
         .frame(minWidth: 300, minHeight: 200) // 还有很多其他参数,我们只设置了最小宽高
         .navigationTitle("Edit \(theme.name)") // 设置导航栏标题(只在Navigation导航过来时有效)
@@ -77,12 +77,18 @@ struct ThemeEditor: View {
     // 在原有的表情组上添加新的表情
     func addEmojis(_ emojis: String) {
         withAnimation {
+            // 增加前的卡片数量
+            let oldCardCount = theme.cardsSet.count
             // 分离可能一次性输入的多个表情
             for emoji in emojis {
                 theme.cardsSet = (theme.cardsSet + String(emoji)) // 字符转换为字符串
                     .filter { $0.isEmoji } // 确保是表情
                     .removingDuplicateCharacters
             }
+            // 增加的卡片数量
+            let newCardCount = theme.cardsSet.count
+            // 增加表情后,自动增加卡片对数
+            theme.pairsOfCards = min(theme.pairsOfCards + newCardCount -  oldCardCount, theme.cardsSet.count)
         }
     }
 

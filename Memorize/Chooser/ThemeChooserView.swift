@@ -86,8 +86,7 @@ struct ThemeChooserView: View {
 //                        }
 //                    }
 
-                // 用于编辑模式切换按钮(swiftUI自带)
-                // TODO: 左边放添加主题的按扭,下面是临时演示代码
+                // 下面是临时演示代码
                 // ToolbarItem(placement: .navigationBarLeading) {
                 //    if presentationMode.wrappedValue.isPresented,
                 //       UIDevice.current.userInterfaceIdiom != .pad
@@ -97,6 +96,18 @@ struct ThemeChooserView: View {
                 //        }
                 //    }
                 // }
+                // 用于编辑模式切换按钮(swiftUI自带)
+                // TODO: 左边放添加主题的按扭
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        // 创建一个空白主题并传入
+                        let newTheme = themes.insertTheme(name: "", cardsSet: [], cardColor: .black, pairsOfCards: 0)
+                        selectedTheme = newTheme // 创建的主题
+                        isShowingThemeEditor = true // 开启主题编辑器
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                }
             }
 //            .navigationBarItems(trailing: EditButton())
             .environment(\.editMode, $editMode) // 使用了绑定来修改和显示编辑模式

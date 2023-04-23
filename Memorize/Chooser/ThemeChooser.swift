@@ -36,11 +36,12 @@ class ThemeChooser: ObservableObject {
     // MARK: - Intent(s)
 
     // 添加主题(保证唯一id)
-    func insertTheme(name themeName: String, cardsSet: [String]? = nil, cardColor: Color, at index: Int = 0, pairsOfCards: Int) {
+    func insertTheme(name themeName: String, cardsSet: [String]? = nil, cardColor: Color, at index: Int = 0, pairsOfCards: Int) -> ThemeChooser.Theme {
         let uniqueID = (themes.max(by: { $0.id < $1.id })?.id ?? 0) + 1 // 保证id唯一
         let newTheme = Theme(name: themeName, cardsSet: cardsSet ?? [], cardColor: cardColor, id: uniqueID, pairsOfCards: pairsOfCards)
         let safeIndex = min(max(index, 0), themes.count) // 保证index不重复
         themes.insert(newTheme, at: safeIndex)
+        return themes[safeIndex]
     }
 
     // 主题的结构
