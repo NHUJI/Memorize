@@ -17,8 +17,11 @@ struct EmojiMemoryGameView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
-                Text(game.currentTheme.name.capitalized).font(.largeTitle).foregroundColor(game.currentTheme.cardColor) // 主题
-                Text("score: \(game.model.score)").foregroundColor(game.currentTheme.cardColor) // 分数
+                Text(game.currentTheme.name.capitalized)
+                    .font(.largeTitle)
+                    .foregroundColor(ColorUtils.colorMap[game.currentTheme.cardColor] ?? .black) // 主题
+                Text("score: \(game.model.score)")
+                    .foregroundColor(ColorUtils.colorMap[game.currentTheme.cardColor] ?? .black) // 分数
                 gameBody // 游戏本体
                 HStack { // 按扭
                     shuffle
@@ -72,7 +75,7 @@ struct EmojiMemoryGameView: View {
                     }
             }
         }
-        .foregroundColor(game.currentTheme.cardColor)
+        .foregroundColor(ColorUtils.colorMap[game.currentTheme.cardColor] ?? .black)
     }
     
     var deckBody: some View {
@@ -85,7 +88,7 @@ struct EmojiMemoryGameView: View {
             }
         }
         .frame(width: DrawingConstants.undealtWidth, height: DrawingConstants.undealtHeigh)
-        .foregroundColor(game.currentTheme.cardColor)
+        .foregroundColor(ColorUtils.colorMap[game.currentTheme.cardColor] ?? .black)
         .onTapGesture {
             // 为了卡片出现的效果,当AspectVGrid出现后才显示卡片
             for card in game.cards {
@@ -189,7 +192,8 @@ private enum DrawingConstants {
 // preview需要的,不需要看它
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let theme = ThemeChooser.Theme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺"], cardColor: .red, id: 13, pairsOfCards: 6)
+        let theme = ThemeChooser.Theme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺"], cardColor:
+            RGBAColor(red: 1, green: 0, blue: 0, alpha: 1), id: 13, pairsOfCards: 6)
         
         let game = EmojiMemoryGame(chosenTheme: theme)
 //        game.choose(game.cards.first!)

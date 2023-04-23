@@ -28,7 +28,7 @@ struct ThemeEditor: View {
 
     init(theme: Binding<ThemeChooser.Theme>) {
         self._theme = theme
-        self.selectedColor = theme.wrappedValue.cardColor
+        self.selectedColor = ColorUtils.colorMap[theme.wrappedValue.cardColor] ?? .black
     }
 
     // MARK: 表格项
@@ -88,7 +88,7 @@ struct ThemeEditor: View {
             // 增加的卡片数量
             let newCardCount = theme.cardsSet.count
             // 增加表情后,自动增加卡片对数
-            theme.pairsOfCards = min(theme.pairsOfCards + newCardCount -  oldCardCount, theme.cardsSet.count)
+            theme.pairsOfCards = min(theme.pairsOfCards + newCardCount - oldCardCount, theme.cardsSet.count)
         }
     }
 
@@ -106,30 +106,51 @@ struct ThemeEditor: View {
         }
     }
 
-    @State private var color = Color.clear
-    let colors: [Color] = [.black, .blue, .brown, .cyan, .gray, .green, .indigo, .mint, .orange, .pink, .purple, .red, .teal, .yellow]
+    @State private var color = RGBAColor(red: 0, green: 0, blue: 0, alpha: 0)
+
+    // 预置颜色
+    let colors: [RGBAColor] = [
+        RGBAColor(red: 0, green: 0, blue: 0, alpha: 1), // black
+        RGBAColor(red: 0, green: 0, blue: 1, alpha: 1), // blue
+        RGBAColor(red: 0.6, green: 0.4, blue: 0.2, alpha: 1), // brown
+        RGBAColor(red: 0, green: 1, blue: 1, alpha: 1), // cyan
+        RGBAColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1), // gray
+        RGBAColor(red: 0, green: 1, blue: 0, alpha: 1), // green
+        RGBAColor(red: 0.294, green: 0, blue: 0.51, alpha: 1), // indigo
+        RGBAColor(red: 0.596, green: 1.00, blue: 0.596, alpha: 1), // mint
+        RGBAColor(red: 1, green: 0.647, blue: 0, alpha: 1), // orange
+        RGBAColor(red: 1.00, green: 0.753, blue: 0.796, alpha: 1), // pink
+        RGBAColor(red: 0.502, green: 0.000, blue: 0.502, alpha: 1), // purple
+        RGBAColor(red: 1, green: 0, blue: 0, alpha: 1), // red
+        RGBAColor(red: 0, green: 128, blue: 128, alpha: 1), // teal
+        RGBAColor(red: 1, green: 1, blue: 0, alpha: 1) // yellow
+    ]
+
     @State private var selectedColor: Color
     let columns = [GridItem(.adaptive(minimum: 60))]
     var colorSection: some View {
         Section(header: Text("COLOR").font(.system(.body, design: .rounded)).bold()) {
-            // TODO: 变成多个颜色可选
+            // 多个颜色可选
             //     Text($theme.cardColor.wrappedValue.description)
             //     VStack {
             //     ColorPicker("选择颜色", selection: $color)
-            Text("您选择的颜色: \($selectedColor.wrappedValue.description)")
-                .foregroundColor(selectedColor)
+//           
 //        }
 
+         Text("您选择的颜色: \($selectedColor.wrappedValue.description)")
+               .foregroundColor(ColorUtils.colorMap[color] ?? .black)
             ScrollView {
+//                Text(RGBAColor(color: .yellow).description)
                 LazyVGrid(columns: columns) {
-                    ForEach(colors, id: \.self) { color in
+                    ForEach(colors, id: \.hashValue) { color in
                         Rectangle()
-                            .fill(color)
+                            .fill(ColorUtils.colorMap[color]!)
+//                            .fill(Color(rgbaColor: color)) // 难看的预设RGBA色彩
                             .frame(width: 60, height: 70)
                             .cornerRadius(10)
                             .onTapGesture {
                                 theme.cardColor = color
-                                selectedColor = color
+                                selectedColor = ColorUtils.colorMap[color] ?? .black
                             }
                     }
                 }

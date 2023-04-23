@@ -29,7 +29,7 @@ struct ThemeChooserView: View {
                             HStack {
                                 Text(theme.name.capitalized) // 首字母大写
                                     .font(.largeTitle)
-                                    .foregroundColor(theme.cardColor)
+                                    .foregroundColor(ColorUtils.colorMap[theme.cardColor] ?? .black )
                                 Spacer() // 使用它把名字推到最左边
                             }
 
@@ -101,12 +101,12 @@ struct ThemeChooserView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
                         // 创建一个空白主题并传入
-                        let newTheme = themes.insertTheme(name: "", cardsSet: [], cardColor: .black, pairsOfCards: 0)
+                        let newTheme = themes.insertTheme(name: "", cardsSet: [], cardColor: RGBAColor(red: 1, green: 0, blue: 0, alpha: 1) , pairsOfCards: 0)
                         selectedTheme = newTheme // 创建的主题
                         isShowingThemeEditor = true // 开启主题编辑器
                     }) {
                         Image(systemName: "plus")
-                    }
+                    }.frame(height: 96, alignment: .trailing)
                 }
             }
 //            .navigationBarItems(trailing: EditButton())

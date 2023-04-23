@@ -14,29 +14,48 @@ class ThemeChooser: ObservableObject {
     // Model
     @Published var themes = [Theme]() {
         didSet {
-            // TODO: 每次修改后自动保存数据
+            // 每次修改后自动保存数据
+            storeInUserDefaults()
         }
     }
 
-    // TODO: 存储,读取相关 包括key(userDefaultsKey)和存储函数(storeInUserDefaults, restoreFromUserDefaults)
+    // 存储,读取相关 包括key(userDefaultsKey)和存储函数(storeInUserDefaults, restoreFromUserDefaults)
+    // 用于存储数据的key
+    private var userDefaultsKey: String { "ThemeStore:\(name)" }
+    // 存储themes
+    private func storeInUserDefaults() {
+        UserDefaults.standard.set(try? JSONEncoder().encode(themes), forKey: userDefaultsKey)
+    }
+
+    // 读取themes
+    private func restoreFromUserDefaults() {
+        if let jsonData = UserDefaults.standard.data(forKey: userDefaultsKey),
+           let decodedThemes = try? JSONDecoder().decode([Theme].self, from: jsonData)
+        {
+            themes = decodedThemes
+        }
+    }
 
     // 初始化
     init(name: String) {
         self.name = name
-        // TODO: 读取数据
+        // 读取数据
+        restoreFromUserDefaults()
         if themes.isEmpty {
             print("使用内置主题 using built-in themes")
-            insertTheme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺"], cardColor: .red, pairsOfCards: 6)
-            insertTheme(name: "food", cardsSet: ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝"], cardColor: .blue, pairsOfCards: 6)
-            insertTheme(name: "play", cardsSet: ["⚽️", "🪀", "🎾", "🏋🏻", "🥌", "⛸️", "🎸", "🚣‍♀️"], cardColor: .mint, pairsOfCards: 4)
-            insertTheme(name: "mess", cardsSet: ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"], cardColor: .orange, pairsOfCards: 7)
+            insertTheme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺"], cardColor: RGBAColor(red: 0, green: 0, blue: 0, alpha: 1), pairsOfCards: 6)
+            insertTheme(name: "food", cardsSet: ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝"], cardColor: RGBAColor(red: 0, green: 0, blue: 0, alpha: 1), pairsOfCards: 6)
+            insertTheme(name: "play", cardsSet: ["⚽️", "🪀", "🎾", "🏋🏻", "🥌", "⛸️", "🎸", "🚣‍♀️"], cardColor: RGBAColor(red: 0, green: 0, blue: 0, alpha: 1), pairsOfCards: 4)
+            insertTheme(name: "mess", cardsSet: ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"], cardColor: RGBAColor(red: 0, green: 0, blue: 0, alpha: 1), pairsOfCards: 7)
+        } else {
+            print("使用存储主题 using stored themes from UserDefaults: \(themes)")
         }
     }
 
     // MARK: - Intent(s)
 
     // 添加主题(保证唯一id)
-    func insertTheme(name themeName: String, cardsSet: [String]? = nil, cardColor: Color, at index: Int = 0, pairsOfCards: Int) -> ThemeChooser.Theme {
+    func insertTheme(name themeName: String, cardsSet: [String]? = nil, cardColor: RGBAColor, at index: Int = 0, pairsOfCards: Int) -> ThemeChooser.Theme {
         let uniqueID = (themes.max(by: { $0.id < $1.id })?.id ?? 0) + 1 // 保证id唯一
         let newTheme = Theme(name: themeName, cardsSet: cardsSet ?? [], cardColor: cardColor, id: uniqueID, pairsOfCards: pairsOfCards)
         let safeIndex = min(max(index, 0), themes.count) // 保证index不重复
@@ -45,10 +64,10 @@ class ThemeChooser: ObservableObject {
     }
 
     // 主题的结构
-    struct Theme: Identifiable, Equatable, Hashable {
+    struct Theme: Identifiable, Equatable, Hashable, Codable {
         var name: String // 主题名称
         var cardsSet: [String] // 卡片集合 (卡片对数可以自己算出来)
-        var cardColor: Color // 卡片颜色
+        var cardColor: RGBAColor // 卡片颜色
         var id: Int // 唯一标识
         var pairsOfCards: Int // 卡片对数
 
