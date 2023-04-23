@@ -13,7 +13,7 @@ struct ThemeChooserView: View {
     @Environment(\.editMode) var editModeEnvironment
     @State private var isShowingThemeEditor = false // 是否显示主题编辑器
     // 用于返回按钮,一般不会自己创建相关的本地变量
-    @Environment(\.presentationMode) var presentationMode
+//    @Environment(\.presentationMode) var presentationMode
     // 选中的theme
     @State private var selectedTheme: ThemeChooser.Theme?
 
@@ -22,7 +22,7 @@ struct ThemeChooserView: View {
     var body: some View {
         NavigationStack {
             List {
-                EditButton().listRowInsets(EdgeInsets(top: 0, leading: 300, bottom: 0, trailing: 0))
+                // EditButton().listRowInsets(EdgeInsets(top: 0, leading: 300, bottom: 0, trailing: 0)) // 测试用的按扭
                 ForEach(themes.themes) { theme in
                     NavigationLink(value: theme) {
                         VStack {
@@ -61,13 +61,14 @@ struct ThemeChooserView: View {
             }
             .toolbar {
                 ToolbarItem {
-                    //  EditButton()
-                    Button(action: {
-                        isClicked.toggle()
-                    }) {
-                        Text("Click me")
-                            .foregroundColor(isClicked ? .red : .blue)
-                    }
+                    EditButton().frame(height: 96, alignment: .trailing)
+                    // Button(action: {
+                    //     isClicked.toggle()
+                    // }) {
+                    //     Text("Click me")
+                    //         .foregroundColor(isClicked ? .red : .blue)
+                    //         .frame(height: 96, alignment: .trailing)
+                    // }
                 }
 //                    Button(editMode == .inactive ? "Edit" : "Done") {
 //                        print("EditButton")

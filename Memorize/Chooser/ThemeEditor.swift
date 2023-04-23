@@ -18,9 +18,9 @@ struct ThemeEditor: View {
         Form {
             nameSection
             removeEmojiSection
-            addEmojiSection
-            cardCountSection
-            colorSection
+//            addEmojiSection
+//            cardCountSection
+//            colorSection
         }
         .frame(minWidth: 300, minHeight: 200) // 还有很多其他参数,我们只设置了最小宽高
         .navigationTitle("Edit \(theme.name)") // 设置导航栏标题(只在Navigation导航过来时有效)
