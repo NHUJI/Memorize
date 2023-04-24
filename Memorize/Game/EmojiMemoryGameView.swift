@@ -14,11 +14,17 @@ struct EmojiMemoryGameView: View {
     
     @Namespace private var dealingNamespace
     
+    @State private var showText = false // 用于提示动画
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
-                Text(game.currentTheme.name).font(.largeTitle).foregroundColor(game.currentTheme.cardColor) // 主题
-                Text("score: \(game.model.score)").foregroundColor(game.currentTheme.cardColor) // 分数
+                // Text("\(game.isResumingGame.description)")
+                Text(game.currentTheme.name.capitalized)
+                    .font(.largeTitle)
+                    .foregroundColor(ColorUtils.colorMap[game.currentTheme.cardColor] ?? .black) // 主题
+                Text("score: \(game.model.score)")
+                    .foregroundColor(ColorUtils.colorMap[game.currentTheme.cardColor] ?? .black) // 分数
                 gameBody // 游戏本体
                 HStack { // 按扭
                     shuffle
@@ -30,6 +36,24 @@ struct EmojiMemoryGameView: View {
             deckBody // 发卡的区域
         }
         .padding()
+        .overlay(
+            Group {
+                if game.isResumingGame == true {
+                    Text("Game resumed")
+                        .animation(.easeInOut(duration: 0.5), value: showText)
+                        .foregroundColor(ColorUtils.colorMap[game.currentTheme.cardColor] ?? .black)
+                        .font(.headline)
+                        .onAppear {
+                            showText = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                withAnimation {
+                                    game.isResumingGame = false
+                                }
+                            }
+                        }
+                }
+            }
+        )
     }
     
     @State private var dealt = Set<Int>()
@@ -72,7 +96,7 @@ struct EmojiMemoryGameView: View {
                     }
             }
         }
-        .foregroundColor(game.currentTheme.cardColor)
+        .foregroundColor(ColorUtils.colorMap[game.currentTheme.cardColor] ?? .black)
     }
     
     var deckBody: some View {
@@ -85,7 +109,7 @@ struct EmojiMemoryGameView: View {
             }
         }
         .frame(width: DrawingConstants.undealtWidth, height: DrawingConstants.undealtHeigh)
-        .foregroundColor(game.currentTheme.cardColor)
+        .foregroundColor(ColorUtils.colorMap[game.currentTheme.cardColor] ?? .black)
         .onTapGesture {
             // 为了卡片出现的效果,当AspectVGrid出现后才显示卡片
             for card in game.cards {
@@ -96,7 +120,6 @@ struct EmojiMemoryGameView: View {
         }
     }
     
-    // TODO: 需要和new game接合了
     var shuffle: some View {
         Button("Shuffle") {
             withAnimation {
@@ -190,7 +213,10 @@ private enum DrawingConstants {
 // preview需要的,不需要看它
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let game = EmojiMemoryGame()
+        let theme = ThemeChooser.Theme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺"], cardColor:
+            RGBAColor(red: 1, green: 0, blue: 0, alpha: 1), id: 13, pairsOfCards: 6)
+        
+        let game = EmojiMemoryGame(chosenTheme: theme)
 //        game.choose(game.cards.first!)
         // 可以通过设置多个EmojiMemoryGameView()来看不同的模拟效果
         return EmojiMemoryGameView(game: game)
