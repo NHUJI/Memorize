@@ -14,9 +14,12 @@ struct EmojiMemoryGameView: View {
     
     @Namespace private var dealingNamespace
     
+    @State private var showText = false // 用于提示动画
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
+                // Text("\(game.isResumingGame.description)")
                 Text(game.currentTheme.name.capitalized)
                     .font(.largeTitle)
                     .foregroundColor(ColorUtils.colorMap[game.currentTheme.cardColor] ?? .black) // 主题
@@ -33,6 +36,24 @@ struct EmojiMemoryGameView: View {
             deckBody // 发卡的区域
         }
         .padding()
+        .overlay(
+            Group {
+                if game.isResumingGame == true {
+                    Text("Game resumed")
+                        .animation(.easeInOut(duration: 0.5), value: showText)
+                        .foregroundColor(ColorUtils.colorMap[game.currentTheme.cardColor] ?? .black)
+                        .font(.headline)
+                        .onAppear {
+                            showText = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                withAnimation {
+                                    game.isResumingGame = false
+                                }
+                            }
+                        }
+                }
+            }
+        )
     }
     
     @State private var dealt = Set<Int>()

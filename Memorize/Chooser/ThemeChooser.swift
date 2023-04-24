@@ -43,12 +43,12 @@ class ThemeChooser: ObservableObject {
         restoreFromUserDefaults()
         if themes.isEmpty {
             print("使用内置主题 using built-in themes")
-            insertTheme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺"], cardColor: RGBAColor(red: 0, green: 0, blue: 0, alpha: 1), pairsOfCards: 6)
-            insertTheme(name: "food", cardsSet: ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝"], cardColor: RGBAColor(red: 0, green: 0, blue: 0, alpha: 1), pairsOfCards: 6)
-            insertTheme(name: "play", cardsSet: ["⚽️", "🪀", "🎾", "🏋🏻", "🥌", "⛸️", "🎸", "🚣‍♀️"], cardColor: RGBAColor(red: 0, green: 0, blue: 0, alpha: 1), pairsOfCards: 4)
-            insertTheme(name: "mess", cardsSet: ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"], cardColor: RGBAColor(red: 0, green: 0, blue: 0, alpha: 1), pairsOfCards: 7)
+            _ = insertTheme(name: "car", cardsSet: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎️", "🚓", "🚑", "🚒", "🚛", "🛺"], cardColor: RGBAColor(red: 0, green: 0, blue: 1, alpha: 1), pairsOfCards: 6)
+            _ = insertTheme(name: "food", cardsSet: ["🍎", "🍆", "🥕", "🫑", "🧅", "🍅", "🍈", "🍇", "🍍", "🌯", "🍝"], cardColor: RGBAColor(red: 0, green: 1, blue: 0, alpha: 1), pairsOfCards: 6)
+            _ = insertTheme(name: "play", cardsSet: ["⚽️", "🪀", "🎾", "🏋🏻", "🥌", "⛸️", "🎸", "🚣‍♀️"], cardColor: RGBAColor(red: 1.00, green: 0.753, blue: 0.796, alpha: 1), pairsOfCards: 4)
+            _ = insertTheme(name: "mess", cardsSet: ["🍙", "🍰", "🧁", "🍭", "🍝", "🍲", "🥫", "🌮", "🥪", "🧇", "🍈", "🥥", "🍓", "🍋"], cardColor: RGBAColor(red: 1, green: 0, blue: 0, alpha: 1), pairsOfCards: 7)
         } else {
-            print("使用存储主题 using stored themes from UserDefaults: \(themes)")
+//            print("使用存储主题 using stored themes from UserDefaults: \(themes)")
         }
     }
 

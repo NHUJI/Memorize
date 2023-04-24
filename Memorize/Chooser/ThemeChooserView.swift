@@ -56,7 +56,6 @@ struct ThemeChooserView: View {
             .navigationTitle("Memorize") // 列表标题
             // 这里的for似乎要放NavigationLink发送来接收的类型才行
             .navigationDestination(for: ThemeChooser.Theme.self) { theme in
-//                ThemeEditor(theme: $themes.themes[theme])
                 EmojiMemoryGameView(game: EmojiMemoryGame(chosenTheme: theme))
             }
             .toolbar {
@@ -97,7 +96,7 @@ struct ThemeChooserView: View {
                 //    }
                 // }
                 // 用于编辑模式切换按钮(swiftUI自带)
-                // TODO: 左边放添加主题的按扭
+
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
                         // 创建一个空白主题并传入

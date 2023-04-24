@@ -134,24 +134,33 @@ struct ThemeEditor: View {
             //     Text($theme.cardColor.wrappedValue.description)
             //     VStack {
             //     ColorPicker("选择颜色", selection: $color)
-//           
+//
 //        }
 
-         Text("您选择的颜色: \($selectedColor.wrappedValue.description)")
-               .foregroundColor(ColorUtils.colorMap[color] ?? .black)
+            Text("Your choice of color: \($selectedColor.wrappedValue.description)")
+                .foregroundColor(selectedColor)
+                .shadow(color: .white.opacity(0.6), radius: 5, x: 0, y: 0)
+
             ScrollView {
-//                Text(RGBAColor(color: .yellow).description)
                 LazyVGrid(columns: columns) {
                     ForEach(colors, id: \.hashValue) { color in
-                        Rectangle()
-                            .fill(ColorUtils.colorMap[color]!)
-//                            .fill(Color(rgbaColor: color)) // 难看的预设RGBA色彩
-                            .frame(width: 60, height: 70)
-                            .cornerRadius(10)
-                            .onTapGesture {
-                                theme.cardColor = color
-                                selectedColor = ColorUtils.colorMap[color] ?? .black
+                        ZStack {
+                            Rectangle()
+                                .fill(ColorUtils.colorMap[color]!)
+                                //                            .fill(Color(rgbaColor: color)) // 难看的预设RGBA色彩
+                                .frame(width: 60, height: 70)
+                                .cornerRadius(10)
+                                .onTapGesture {
+                                    theme.cardColor = color
+                                    selectedColor = ColorUtils.colorMap[color] ?? .black
+                                }
+                            if theme.cardColor == color {
+                                Image(systemName: "checkmark")
+                                    .font(.system(size: 30, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .shadow(color: .white.opacity(1), radius: 13, x: 0, y: 0)
                             }
+                        }
                     }
                 }
             }
@@ -162,6 +171,7 @@ struct ThemeEditor: View {
 struct ThemeEditor_Previews: PreviewProvider {
     static var previews: some View {
         @State var theme = ThemeChooser(name: "test").themes.first!
-        ThemeEditor(theme: $theme).previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/300.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/350.0/*@END_MENU_TOKEN@*/))
+        ThemeEditor(theme: $theme)
+//            .previewLayout(.fixed(width: /*@START_MENU_TOKEN@*/300.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/350.0/*@END_MENU_TOKEN@*/))
     }
 }

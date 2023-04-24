@@ -11,7 +11,7 @@ import Foundation
 import SwiftUI
 
 // <CardContent>:使用泛型增加扩展性,比如卡片可以接受图片、String和更多类型的数据作为卡面,并且CardContent类型要求可以进行比较
-struct MemoryGame<CardContent> where CardContent: Equatable {
+struct MemoryGame<CardContent>: Codable where CardContent: Equatable, CardContent: Codable {
     typealias Theme = ThemeChooser.Theme // 给Theme结构加上别名,减少去掉本身结构后的修改
     private(set) var cards: [Card]
     private(set) var theme: Theme
@@ -76,7 +76,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         cards.shuffle()
     }
 
-    struct Card: Identifiable {
+    struct Card: Identifiable, Codable {
         var isFaceUp = false {
             didSet {
                 if isFaceUp {
