@@ -28,8 +28,11 @@ class EmojiMemoryGame: ObservableObject {
 //        if EmojiMemoryGame.oneInit {
         let theme = userDefaultsManager.readThemeFromUserDefaults()
         if theme == chosenTheme {
-            self.model = userDefaultsManager.readModelFromUserDefaults() ?? MemoryGame<String>(theme: chosenTheme) { pairIndex in
+            let oldModel = userDefaultsManager.readModelFromUserDefaults() ?? MemoryGame<String>(theme: chosenTheme) { pairIndex in
                 chosenTheme.cardsSet[pairIndex]
+            }
+            if oldModel.theme.name == theme?.name {
+                self.model = oldModel
             }
             self.isResumingGame = true
             print("恢复游戏: \(model.theme.name)")

@@ -9,12 +9,12 @@ import SwiftUI
 
 @main
 struct MemorizeApp: App {
-//    let userDefaultsManager = UserDefaultsManager()
-//
-//    init() {
-//        userDefaultsManager.deleteThemeArrayFromUserDefaults()
-//        userDefaultsManager.deleteModelFromUserDefaults()
-//    }
+   let userDefaultsManager = UserDefaultsManager()
+
+   init() {
+       userDefaultsManager.deleteThemeArrayFromUserDefaults()
+       userDefaultsManager.deleteModelFromUserDefaults()
+   }
 
     var body: some Scene {
         WindowGroup {
